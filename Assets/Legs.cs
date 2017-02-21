@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Legs : MonoBehaviour
 {
-    bool walking = true;
+    public bool walking = true;
 
     public GameObject square;
     float hor;
@@ -28,7 +28,7 @@ public class Legs : MonoBehaviour
     Vector2 refVelocity2;
     Vector2 refVelocity3;
     float refV;
-
+    public FaceRotate fr;
 
     Rigidbody2D rb;
     // Use this for initialization
@@ -83,26 +83,42 @@ public class Legs : MonoBehaviour
             {
                 if (foot1.GetComponent<groundCheck>().isGrounded && foot2.GetComponent<groundCheck>().isGrounded)
                 {
-                    rb.AddForce(transform.up * jumpHeight);
+                    rb.velocity = rb.velocity + new Vector2(0, jumpHeight);
+
+                    //rb.AddForce(transform.up * jumpHeight);
                 }
             }
 
             //facial features -- fix this!!
+
+            /*
             if (rb.velocity.x >= 0f)
             {
-                eyeWhite.transform.localPosition = Vector2.SmoothDamp(eyeWhite.transform.localPosition, new Vector2(0.17f, eyeWhite.transform.localPosition.y), ref refVelocity1, 0.2f, 50, Time.deltaTime);
-                eyeBlack.transform.localPosition = Vector2.SmoothDamp(eyeBlack.transform.localPosition, new Vector2(0.23f, eyeBlack.transform.localPosition.y), ref refVelocity3, 0.2f, 50, Time.deltaTime);
-                beak.transform.localPosition = Vector2.SmoothDamp(beak.transform.localPosition, new Vector2(0.451f, beak.transform.localPosition.y), ref refVelocity2, 0.2f, 50, Time.deltaTime);
-                beak.transform.localScale = new Vector2(0.806f, Mathf.SmoothDamp(beak.transform.localScale.y, 0.806f, ref refV, Time.deltaTime * 10));
+                if (!fr.aiming)
+                {
+                    eyeWhite.transform.localPosition = Vector2.SmoothDamp(eyeWhite.transform.localPosition, new Vector2(0.17f, eyeWhite.transform.localPosition.y), ref refVelocity1, 0.2f, 50, Time.deltaTime);
+                    eyeBlack.transform.localPosition = Vector2.SmoothDamp(eyeBlack.transform.localPosition, new Vector2(0.23f, eyeBlack.transform.localPosition.y), ref refVelocity3, 0.2f, 50, Time.deltaTime);
+                    beak.transform.localPosition = Vector2.SmoothDamp(beak.transform.localPosition, new Vector2(0.451f, beak.transform.localPosition.y), ref refVelocity2, 0.2f, 50, Time.deltaTime);
+
+                    beak.transform.localScale = new Vector2(0.806f, Mathf.SmoothDamp(beak.transform.localScale.y, 0.806f, ref refV, Time.deltaTime * 10));
+
+                }
             }
             else if (rb.velocity.x < -.02f)
             {
-                eyeWhite.transform.localPosition = Vector2.SmoothDamp(eyeWhite.transform.localPosition, new Vector2(-0.17f, eyeWhite.transform.localPosition.y), ref refVelocity1, 0.2f, 50, Time.deltaTime);
-                eyeBlack.transform.localPosition = Vector2.SmoothDamp(eyeBlack.transform.localPosition, new Vector2(-0.23f, eyeBlack.transform.localPosition.y), ref refVelocity3, 0.2f, 50, Time.deltaTime);
-                beak.transform.localPosition = Vector2.SmoothDamp(beak.transform.localPosition, new Vector2(-0.451f, beak.transform.localPosition.y), ref refVelocity2, 0.2f, 50, Time.deltaTime);
-                beak.transform.localScale = new Vector2(-0.806f, Mathf.SmoothDamp(beak.transform.localScale.y, -0.806f, ref refV, Time.deltaTime * 10));
+                if (!fr.aiming)
+                {
+                    eyeWhite.transform.localPosition = Vector2.SmoothDamp(eyeWhite.transform.localPosition, new Vector2(-0.17f, eyeWhite.transform.localPosition.y), ref refVelocity1, 0.2f, 50, Time.deltaTime);
+                    eyeBlack.transform.localPosition = Vector2.SmoothDamp(eyeBlack.transform.localPosition, new Vector2(-0.23f, eyeBlack.transform.localPosition.y), ref refVelocity3, 0.2f, 50, Time.deltaTime);
+                    beak.transform.localPosition = Vector2.SmoothDamp(beak.transform.localPosition, new Vector2(-0.451f, beak.transform.localPosition.y), ref refVelocity2, 0.2f, 50, Time.deltaTime);
+
+                    beak.transform.localScale = new Vector2(-0.806f, Mathf.SmoothDamp(beak.transform.localScale.y, -0.806f, ref refV, Time.deltaTime * 10));
+
+                }
 
             }
+            */
+
         }
         else
         {
@@ -110,8 +126,11 @@ public class Legs : MonoBehaviour
             rb.AddTorque(-hor * rollSpeed);
             transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, Vector2.zero, Time.deltaTime * 20);
             transform.GetChild(1).localScale = Vector2.Lerp(transform.GetChild(1).localScale, Vector2.zero, Time.deltaTime * 20);
-            beak.transform.localScale = Vector2.Lerp(beak.transform.localScale, Vector2.zero, Time.deltaTime * 21);
+        }
 
+        if(Input.GetButtonDown("Crouch") && walking)
+        {
+            rb.velocity = rb.velocity + new Vector2(0, jumpHeight*0.5f);
         }
     }
 }
