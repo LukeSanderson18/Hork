@@ -5,7 +5,7 @@ using UnityEngine;
 public class Legs : MonoBehaviour
 {
     public bool walking = true;
-
+    bool crouching;
     public GameObject square;
     float hor;
     float ver;
@@ -41,7 +41,7 @@ public class Legs : MonoBehaviour
     {
         hor = Input.GetAxis("Horizontal");
         ver = Input.GetAxis("Vertical");
-        if (ver < -0.5f || Input.GetButton("Crouch"))
+        if (Input.GetButton("Crouch"))
         {
             walking = false;
             square.SetActive(false);
@@ -50,6 +50,17 @@ public class Legs : MonoBehaviour
         {
             walking = true;
             square.SetActive(true);
+        }
+
+        if(ver < -0.4f)
+        {
+            rb.mass = 100;
+            crouching = true;
+        }
+        else
+        {
+            rb.mass = 40;
+            crouching = false;
         }
 
 
@@ -83,9 +94,14 @@ public class Legs : MonoBehaviour
             {
                 if (foot1.GetComponent<groundCheck>().isGrounded && foot2.GetComponent<groundCheck>().isGrounded)
                 {
-                    rb.velocity = rb.velocity + new Vector2(0, jumpHeight);
-
-                    //rb.AddForce(transform.up * jumpHeight);
+                    if (crouching)
+                    {
+                        rb.velocity = rb.velocity + new Vector2(0, jumpHeight*2f);
+                    }
+                    else
+                    {
+                        rb.velocity = rb.velocity + new Vector2(0, jumpHeight);
+                    }
                 }
             }
 
