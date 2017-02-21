@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class Legs : MonoBehaviour
 {
+    bool walking = true;
 
     public GameObject square;
-     float hor;
-     float ver;
+    float hor;
+    float ver;
     bool isGrounded;
     public float walkSpeed = 5;
     public float jumpHeight = 6000;
+    public float rollSpeed = 20;
 
     public GameObject eyeWhite;
     public GameObject eyeBlack;
     public GameObject beak;
+
+    public GameObject foot1;
+    public GameObject foot2;
 
     public GameObject leftTarget;
     public GameObject rightTarget;
@@ -32,71 +37,80 @@ public class Legs : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.name == "s")
-        {
-            isGrounded = true;
-        }
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.name == "s")
-        {
-            isGrounded = false;
-        }
-    }
     void Update()
     {
         hor = Input.GetAxis("Horizontal");
         ver = Input.GetAxis("Vertical");
+        if (ver < -0.5f || Input.GetButton("Crouch"))
+        {
+            walking = false;
+            square.SetActive(false);
+        }
+        else
+        {
+            walking = true;
+            square.SetActive(true);
+        }
+
 
     }
     // Update is called once per frame
     void FixedUpdate()
     {
-        //move
-        rb.AddForce(transform.right * hor * walkSpeed * Time.deltaTime);
+        if (walking)
+        {
+            transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, new Vector2(0.2f, 0.2f), Time.deltaTime * 20);
+            transform.GetChild(1).localScale = Vector2.Lerp(transform.GetChild(1).localScale, new Vector2(0.2f, 0.2f), Time.deltaTime * 20);
 
-        //bounce
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up, Mathf.Infinity, LayerMask.GetMask("Floor"));
-        if (hit.collider != null)
-        {
-            float distance = Mathf.Abs(hit.point.y - transform.position.y);
-            square.transform.position = new Vector2(transform.position.x, (transform.position.y - distance)+1.22f);
+            //move
+            rb.AddForce(Vector3.right * hor * walkSpeed * Time.deltaTime);
 
-        }
+            var rot = Quaternion.FromToRotation(transform.up, Vector3.up);
+            rb.rotation = 0;
+            rb.freezeRotation = true;
 
-        RaycastHit2D hitLeft = Physics2D.Raycast(transform.GetChild(0).transform.position, -Vector2.up, Mathf.Infinity, LayerMask.GetMask("Floor"));
-        if (hitLeft.collider != null)
-        {
-           // leftTarget.transform.position = new Vector2(transform.GetChild(0).transform.position.x, hitLeft.point.y);
-        }
-        RaycastHit2D hitRight = Physics2D.Raycast(transform.GetChild(1).transform.position, -Vector2.up, Mathf.Infinity, LayerMask.GetMask("Floor"));
-        if (hitRight.collider != null)
-        {
-            //rightTarget.transform.position = new Vector2(transform.GetChild(1).transform.position.x, hitRight.point.y);
-        }
-        //jump
-        if (Input.GetButtonDown("Jump") && isGrounded)
-        {
-            rb.AddForce(transform.up * jumpHeight);
-        }
+            //bounce
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up, Mathf.Infinity, LayerMask.GetMask("Floor"));
+            if (hit.collider != null)
+            {
+                float distance = Mathf.Abs(hit.point.y - transform.position.y);
+                square.transform.position = new Vector2(transform.position.x, (transform.position.y - distance) + 1.22f);
 
-        //facial features -- fix this!!
-        if(rb.velocity.x > .02f)
-        {
-            eyeWhite.transform.localPosition = Vector2.SmoothDamp(eyeWhite.transform.localPosition, new Vector2(0.17f, eyeWhite.transform.localPosition.y), ref refVelocity1, 0.2f,50, Time.deltaTime);
-            eyeBlack.transform.localPosition = Vector2.SmoothDamp(eyeBlack.transform.localPosition, new Vector2(0.23f, eyeBlack.transform.localPosition.y), ref refVelocity3, 0.2f, 50, Time.deltaTime);
-            beak.transform.localPosition = Vector2.SmoothDamp(beak.transform.localPosition, new Vector2(0.451f, beak.transform.localPosition.y), ref refVelocity2, 0.2f, 50, Time.deltaTime);
-            beak.transform.localScale = new Vector2(beak.transform.localScale.x, Mathf.SmoothDamp(beak.transform.localScale.y, 0.806f, ref refV, Time.deltaTime*10));
+            }
+
+            //jump
+            if (Input.GetButtonDown("Jump"))
+            {
+                if (foot1.GetComponent<groundCheck>().isGrounded && foot2.GetComponent<groundCheck>().isGrounded)
+                {
+                    rb.AddForce(transform.up * jumpHeight);
+                }
+            }
+
+            //facial features -- fix this!!
+            if (rb.velocity.x >= 0f)
+            {
+                eyeWhite.transform.localPosition = Vector2.SmoothDamp(eyeWhite.transform.localPosition, new Vector2(0.17f, eyeWhite.transform.localPosition.y), ref refVelocity1, 0.2f, 50, Time.deltaTime);
+                eyeBlack.transform.localPosition = Vector2.SmoothDamp(eyeBlack.transform.localPosition, new Vector2(0.23f, eyeBlack.transform.localPosition.y), ref refVelocity3, 0.2f, 50, Time.deltaTime);
+                beak.transform.localPosition = Vector2.SmoothDamp(beak.transform.localPosition, new Vector2(0.451f, beak.transform.localPosition.y), ref refVelocity2, 0.2f, 50, Time.deltaTime);
+                beak.transform.localScale = new Vector2(0.806f, Mathf.SmoothDamp(beak.transform.localScale.y, 0.806f, ref refV, Time.deltaTime * 10));
+            }
+            else if (rb.velocity.x < -.02f)
+            {
+                eyeWhite.transform.localPosition = Vector2.SmoothDamp(eyeWhite.transform.localPosition, new Vector2(-0.17f, eyeWhite.transform.localPosition.y), ref refVelocity1, 0.2f, 50, Time.deltaTime);
+                eyeBlack.transform.localPosition = Vector2.SmoothDamp(eyeBlack.transform.localPosition, new Vector2(-0.23f, eyeBlack.transform.localPosition.y), ref refVelocity3, 0.2f, 50, Time.deltaTime);
+                beak.transform.localPosition = Vector2.SmoothDamp(beak.transform.localPosition, new Vector2(-0.451f, beak.transform.localPosition.y), ref refVelocity2, 0.2f, 50, Time.deltaTime);
+                beak.transform.localScale = new Vector2(-0.806f, Mathf.SmoothDamp(beak.transform.localScale.y, -0.806f, ref refV, Time.deltaTime * 10));
+
+            }
         }
-        else if (rb.velocity.x < -.02f)
+        else
         {
-            eyeWhite.transform.localPosition = Vector2.SmoothDamp(eyeWhite.transform.localPosition, new Vector2(-0.17f, eyeWhite.transform.localPosition.y), ref refVelocity1, 0.2f, 50, Time.deltaTime);
-            eyeBlack.transform.localPosition = Vector2.SmoothDamp(eyeBlack.transform.localPosition, new Vector2(-0.23f, eyeBlack.transform.localPosition.y), ref refVelocity3, 0.2f, 50, Time.deltaTime);
-            beak.transform.localPosition = Vector2.SmoothDamp(beak.transform.localPosition, new Vector2(-0.451f, beak.transform.localPosition.y), ref refVelocity2, 0.2f, 50, Time.deltaTime);
-            beak.transform.localScale = new Vector2(beak.transform.localScale.x, Mathf.SmoothDamp(beak.transform.localScale.y, -0.806f, ref refV, Time.deltaTime*10));
+            rb.freezeRotation = false;
+            rb.AddTorque(-hor * rollSpeed);
+            transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, Vector2.zero, Time.deltaTime * 20);
+            transform.GetChild(1).localScale = Vector2.Lerp(transform.GetChild(1).localScale, Vector2.zero, Time.deltaTime * 20);
+            beak.transform.localScale = Vector2.Lerp(beak.transform.localScale, Vector2.zero, Time.deltaTime * 21);
 
         }
     }

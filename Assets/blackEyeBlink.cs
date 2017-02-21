@@ -14,7 +14,7 @@ public class blackEyeBlink : MonoBehaviour {
 	void Blink()
     {
         int randInt = Random.Range(0,9);
-        print(randInt);
+       // print(randInt);
 
         if (randInt <= 1)
         {

@@ -28,8 +28,8 @@ public class SimpleCCD : MonoBehaviour
         // min & max has to be between 0 ... 360
         foreach (var node in angleLimits)
         {
-            node.min = Mathf.Clamp(node.min, 0, 360);
-            node.max = Mathf.Clamp(node.max, 0, 360);
+            node.min = Mathf.Clamp(node.min, -360, 360);
+            node.max = Mathf.Clamp(node.max, -360, 360);
         }
     }
 
