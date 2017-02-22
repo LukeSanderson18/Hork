@@ -41,7 +41,7 @@ public class Legs : MonoBehaviour
     {
         hor = Input.GetAxis("Horizontal");
         ver = Input.GetAxis("Vertical");
-        if (Input.GetButton("Crouch"))
+        if (Input.GetAxis("Crouch") > 0.2f)
         {
             walking = false;
             square.SetActive(false);
@@ -61,6 +61,22 @@ public class Legs : MonoBehaviour
         {
             rb.mass = 40;
             crouching = false;
+        }
+
+        //jump
+        if (Input.GetButtonDown("Jump"))
+        {
+            if (foot1.GetComponent<groundCheck>().isGrounded && foot2.GetComponent<groundCheck>().isGrounded)
+            {
+                if (crouching)
+                {
+                    rb.velocity = rb.velocity + new Vector2(0, jumpHeight * 2f);
+                }
+                else
+                {
+                    rb.velocity = rb.velocity + new Vector2(0, jumpHeight);
+                }
+            }
         }
 
 
@@ -86,24 +102,12 @@ public class Legs : MonoBehaviour
             {
                 float distance = Mathf.Abs(hit.point.y - transform.position.y);
                 square.transform.position = new Vector2(transform.position.x, (transform.position.y - distance) + 1.22f);
+                leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, square.transform.position.y - 1.2f);
+                rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, square.transform.position.y - 1.2f);
 
             }
 
-            //jump
-            if (Input.GetButtonDown("Jump"))
-            {
-                if (foot1.GetComponent<groundCheck>().isGrounded && foot2.GetComponent<groundCheck>().isGrounded)
-                {
-                    if (crouching)
-                    {
-                        rb.velocity = rb.velocity + new Vector2(0, jumpHeight*2f);
-                    }
-                    else
-                    {
-                        rb.velocity = rb.velocity + new Vector2(0, jumpHeight);
-                    }
-                }
-            }
+            
 
             //facial features -- fix this!!
 
@@ -144,7 +148,7 @@ public class Legs : MonoBehaviour
             transform.GetChild(1).localScale = Vector2.Lerp(transform.GetChild(1).localScale, Vector2.zero, Time.deltaTime * 20);
         }
 
-        if(Input.GetButtonDown("Crouch") && walking)
+        if (Input.GetAxis("Crouch") > 0.2f && walking)
         {
             rb.velocity = rb.velocity + new Vector2(0, jumpHeight*0.5f);
         }
