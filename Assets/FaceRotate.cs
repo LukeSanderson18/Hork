@@ -23,7 +23,8 @@ public class FaceRotate : MonoBehaviour {
             if (transform.parent.GetComponent<Legs>().walking)
             {
                 float angle = Mathf.Atan2(hor, ver) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
+                Quaternion bane = Quaternion.Euler(new Vector3(0, 0, angle - 90));
+                transform.rotation = Quaternion.Lerp(transform.rotation, bane, Time.deltaTime * 10);
                 aiming = true;
             }
         }

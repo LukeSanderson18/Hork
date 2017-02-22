@@ -10,6 +10,7 @@ public class BulletCol : MonoBehaviour {
     {
         Instantiate(asplosion, transform.position, transform.rotation);
         GetComponent<SpriteRenderer>().enabled = false;
-        GetComponent<BoxCollider2D>().enabled = false;
+        GetComponent<CircleCollider2D>().enabled = false;
+        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
     }
 }
