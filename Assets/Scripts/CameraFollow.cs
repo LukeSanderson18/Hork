@@ -21,6 +21,6 @@ public class CameraFollow : MonoBehaviour {
     {
         hor = Input.GetAxis("RHor");
         ver = Input.GetAxis("RVer");
-        transform.position = Vector3.Lerp(transform.position, player.transform.position + (new Vector3((hor * multi)+(rb.velocity.x*0.3f), height + (-ver * multi), -10)), Time.deltaTime * speed);
+        transform.position = Vector3.Lerp(transform.position, player.transform.position + (new Vector3((hor * multi)+(rb.velocity.x*0.3f), height + (-ver * multi), -10)), Time.fixedDeltaTime * speed);
     }
 }

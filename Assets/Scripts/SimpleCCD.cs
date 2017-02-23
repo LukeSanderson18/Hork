@@ -6,7 +6,7 @@ public class SimpleCCD : MonoBehaviour
 {
     public int iterations = 5;
 
-    [Range(0.01f, 1)]
+    [Range(0.01f, 2)]
     public float damping = 1;
 
     public Transform target;

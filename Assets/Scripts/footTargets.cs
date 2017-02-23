@@ -33,7 +33,7 @@ public class footTargets : MonoBehaviour {
         }
 		
         //move right
-        if (inFront == "right" && player.transform.position.x-.1f > rightFoot.transform.position.x)
+        if (inFront == "right" && player.transform.position.x > rightFoot.transform.position.x)
         {
             leftFoot.transform.position = new Vector2(rightFoot.transform.position.x+offset, leftFoot.transform.position.y);
         }

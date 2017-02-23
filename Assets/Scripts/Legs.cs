@@ -93,11 +93,11 @@ public class Legs : MonoBehaviour
     {
         if (walking)
         {
-            transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, new Vector2(0.2f, 0.2f), Time.deltaTime * 20);
-            transform.GetChild(1).localScale = Vector2.Lerp(transform.GetChild(1).localScale, new Vector2(0.2f, 0.2f), Time.deltaTime * 20);
+            transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, new Vector2(0.2f, 0.2f), Time.fixedDeltaTime * 20);
+            transform.GetChild(1).localScale = Vector2.Lerp(transform.GetChild(1).localScale, new Vector2(0.2f, 0.2f), Time.fixedDeltaTime * 20);
 
             //move
-            rb.AddForce(Vector3.right * hor * walkSpeed * Time.deltaTime);
+            rb.AddForce(Vector3.right * hor * walkSpeed * Time.fixedDeltaTime);
 
             var rot = Quaternion.FromToRotation(transform.up, Vector3.up);
             rb.rotation = 0;
@@ -128,18 +128,21 @@ public class Legs : MonoBehaviour
             }
             if (rightDistance < leftDistance)           //IF RIGHT IS HIGHER
             {
-                print("RIGHT TINGS HIGHER");
                 if (footManager.GOinFront == rightTarget)   //IF RIGHT FOOT IN FRONT
                 {
                     print("1");
-                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset);
-                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
+                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset 
+                        -((transform.GetChild(1).position.x - rightTarget.transform.position.x)/4));//xdistance);
+                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
+                        -((transform.GetChild(0).position.x - leftTarget.transform.position.x)/4));
                 }
                 else
                 {
                     print("2");
-                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset);
-                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
+                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
+                        - ((transform.GetChild(1).position.x - leftTarget.transform.position.x) / 4));//xdistance);
+                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
+                        - ((transform.GetChild(0).position.x - rightTarget.transform.position.x) / 4));
                 }
             }
             else if (leftDistance < rightDistance)                             //IF LEFT IS HIGHER
@@ -147,23 +150,31 @@ public class Legs : MonoBehaviour
                 if (footManager.GOinFront == rightTarget)
                 {
                     print("3");
-                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
-                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset);
+                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
+                        + ((transform.GetChild(1).position.x - rightTarget.transform.position.x) / 4));//xdistance);
+                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
+                        + ((transform.GetChild(0).position.x - leftTarget.transform.position.x) / 4));
                 }
                 else
                 {
                     print("4");
-                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset);
-                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
+                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
+                                            + ((transform.GetChild(1).position.x - leftTarget.transform.position.x) / 4));
+
+                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
+                                                + ((transform.GetChild(0).position.x - rightTarget.transform.position.x) / 4));//xdistance);
+
                 }
 
             }
             else
             {
                 leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
-                rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset);
+                rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(1).position.y - rightDistance + targetOffset);
 
             }
+
+
              
 
             
@@ -212,8 +223,8 @@ public class Legs : MonoBehaviour
         {
             rb.freezeRotation = false;
             rb.AddTorque(-hor * rollSpeed);
-            transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, Vector2.zero, Time.deltaTime * 20);
-            transform.GetChild(1).localScale = Vector2.Lerp(transform.GetChild(1).localScale, Vector2.zero, Time.deltaTime * 20);
+            transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, Vector2.zero, Time.fixedDeltaTime * 20);
+            transform.GetChild(1).localScale = Vector2.Lerp(transform.GetChild(1).localScale, Vector2.zero, Time.fixedDeltaTime * 20);
         }
 
         

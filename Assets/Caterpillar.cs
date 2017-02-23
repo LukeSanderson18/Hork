@@ -29,6 +29,6 @@ public class Caterpillar : MonoBehaviour {
         }
 
         if(firstOne)
-        rb.AddForce(-Vector3.right  * moveSpeed * Time.deltaTime);
+        rb.AddForce(-Vector3.right  * moveSpeed * Time.fixedDeltaTime);
     }
 }
