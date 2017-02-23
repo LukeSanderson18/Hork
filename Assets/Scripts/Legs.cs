@@ -107,6 +107,14 @@ public class Legs : MonoBehaviour
 
             }
 
+            /*
+            if (Input.GetAxis("Crouch") > 0.2f && isGrounded)
+            {
+                print("called");
+                rb.velocity = rb.velocity + new Vector2(0, jumpHeight * 0.5f);
+            }
+             * /
+
             
 
             //facial features -- fix this!!
@@ -148,9 +156,6 @@ public class Legs : MonoBehaviour
             transform.GetChild(1).localScale = Vector2.Lerp(transform.GetChild(1).localScale, Vector2.zero, Time.deltaTime * 20);
         }
 
-        if (Input.GetAxis("Crouch") > 0.2f && walking)
-        {
-            rb.velocity = rb.velocity + new Vector2(0, jumpHeight*0.5f);
-        }
+        
     }
 }
