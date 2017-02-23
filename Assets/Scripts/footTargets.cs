@@ -8,6 +8,9 @@ public class footTargets : MonoBehaviour {
     public GameObject leftFoot;
     public GameObject rightFoot;
     public string inFront = "";
+    public GameObject GOinFront;
+
+    public float offset = 1.2f;
 
     float refVel;
 	// Use this for initialization
@@ -21,31 +24,33 @@ public class footTargets : MonoBehaviour {
         if(rightFoot.transform.position.x > leftFoot.transform.position.x)
         {
             inFront = "right";
+            GOinFront = rightFoot;
         }
         else
         {
             inFront = "left";
+            GOinFront = leftFoot;
         }
 		
         //move right
         if (inFront == "right" && player.transform.position.x-.1f > rightFoot.transform.position.x)
         {
-            leftFoot.transform.position = new Vector2(rightFoot.transform.position.x+1.2f, leftFoot.transform.position.y);
+            leftFoot.transform.position = new Vector2(rightFoot.transform.position.x+offset, leftFoot.transform.position.y);
         }
         
         else if (inFront == "left" && player.transform.position.x > leftFoot.transform.position.x)
         {
-            rightFoot.transform.position = new Vector2(leftFoot.transform.position.x + 1.2f, rightFoot.transform.position.y);
+            rightFoot.transform.position = new Vector2(leftFoot.transform.position.x + offset, rightFoot.transform.position.y);
         }
 
         //move left
         else if (inFront == "right" && player.transform.position.x < leftFoot.transform.position.x)
         {
-            rightFoot.transform.position = new Vector2(leftFoot.transform.position.x - 1.2f, rightFoot.transform.position.y);
+            rightFoot.transform.position = new Vector2(leftFoot.transform.position.x - offset, rightFoot.transform.position.y);
         }
         else if (inFront == "left" && player.transform.position.x < rightFoot.transform.position.x)
         {
-            leftFoot.transform.position = new Vector2(rightFoot.transform.position.x - 1.2f, leftFoot.transform.position.y);
+            leftFoot.transform.position = new Vector2(rightFoot.transform.position.x - offset, leftFoot.transform.position.y);
         }
     }
 }

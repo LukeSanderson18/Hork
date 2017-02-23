@@ -9,6 +9,7 @@ public class Caterpillar : MonoBehaviour {
     public GameObject rightTarget;
     Rigidbody2D rb;
     public float moveSpeed;
+    public bool firstOne;
 	// Use this for initialization
 
     void Start()
@@ -27,6 +28,7 @@ public class Caterpillar : MonoBehaviour {
 
         }
 
+        if(firstOne)
         rb.AddForce(-Vector3.right  * moveSpeed * Time.deltaTime);
     }
 }

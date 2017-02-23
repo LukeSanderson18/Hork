@@ -23,12 +23,19 @@ public class Legs : MonoBehaviour
 
     public GameObject leftTarget;
     public GameObject rightTarget;
+    public float targetOffset;
+    float leftDistance;
+    float rightDistance;
 
     Vector2 refVelocity1;
     Vector2 refVelocity2;
     Vector2 refVelocity3;
     float refV;
     public FaceRotate fr;
+
+    public LayerMask lm;
+
+    public footTargets footManager;
 
     Rigidbody2D rb;
     // Use this for initialization
@@ -96,17 +103,70 @@ public class Legs : MonoBehaviour
             rb.rotation = 0;
             rb.freezeRotation = true;
 
-            //bounce
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up, Mathf.Infinity, LayerMask.GetMask("Floor"));
+            //bounce == square
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up, Mathf.Infinity, lm);
             if (hit.collider != null)
             {
                 float distance = Mathf.Abs(hit.point.y - transform.position.y);
                 square.transform.position = new Vector2(transform.position.x, (transform.position.y - distance) + 1.22f);
-                leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, square.transform.position.y - 1.2f);
-                rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, square.transform.position.y - 1.2f);
-
             }
 
+            //slopes for feet
+            RaycastHit2D hitLeft = Physics2D.Raycast(transform.GetChild(0).position, -Vector2.up, Mathf.Infinity, lm);
+            if (hitLeft.collider != null)
+            {
+                leftDistance = Mathf.Abs(hitLeft.point.y - transform.position.y);
+               // leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - distance + targetOffset);
+                //footManager.GOinFront.transform.position = new Vector2(footManager.GOinFront.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
+            }
+            RaycastHit2D hitRight = Physics2D.Raycast(transform.GetChild(1).position, -Vector2.up, Mathf.Infinity, lm);
+            if (hitRight.collider != null)
+            {
+                rightDistance = Mathf.Abs(hitRight.point.y - transform.position.y);
+                //rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(1).position.y - distance + targetOffset);
+                //footManager.GOinFront.transform.position = new Vector2(footManager.GOinFront.transform.position.x, transform.GetChild(1).position.y - rightDisance + targetOffset);
+            }
+            if (rightDistance < leftDistance)           //IF RIGHT IS HIGHER
+            {
+                print("RIGHT TINGS HIGHER");
+                if (footManager.GOinFront == rightTarget)   //IF RIGHT FOOT IN FRONT
+                {
+                    print("1");
+                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset);
+                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
+                }
+                else
+                {
+                    print("2");
+                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset);
+                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
+                }
+            }
+            else if (leftDistance < rightDistance)                             //IF LEFT IS HIGHER
+            {
+                if (footManager.GOinFront == rightTarget)
+                {
+                    print("3");
+                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
+                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset);
+                }
+                else
+                {
+                    print("4");
+                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset);
+                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
+                }
+
+            }
+            else
+            {
+                leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
+                rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset);
+
+            }
+             
+
+            
             /*
             if (Input.GetAxis("Crouch") > 0.2f && isGrounded)
             {
