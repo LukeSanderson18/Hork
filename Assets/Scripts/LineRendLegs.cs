@@ -14,7 +14,7 @@ public class LineRendLegs : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void LateUpdate () {
 
         lr.SetPosition(0, oneTran.position);
         lr.SetPosition(1, twoTran.position);

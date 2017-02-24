@@ -9,7 +9,7 @@ public class Legs : MonoBehaviour
     public GameObject square;
     float hor;
     float ver;
-    bool isGrounded;
+    public bool isGrounded;
     public float walkSpeed = 5;
     public float jumpHeight = 6000;
     public float rollSpeed = 20;
@@ -70,6 +70,19 @@ public class Legs : MonoBehaviour
             crouching = false;
         }
 
+        if (foot1.GetComponent<groundCheck>().isGrounded || foot2.GetComponent<groundCheck>().isGrounded)
+        {
+            isGrounded = true;
+            footManager.gameObject.SetActive(true);
+            square.transform.localScale = new Vector3(1.5f, 2, 1.5f);
+        }
+        else
+        {
+            isGrounded = false;
+            footManager.gameObject.SetActive(false);
+            square.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+
+        }
         //jump
         if (Input.GetButtonDown("Jump"))
         {
@@ -116,62 +129,64 @@ public class Legs : MonoBehaviour
             if (hitLeft.collider != null)
             {
                 leftDistance = Mathf.Abs(hitLeft.point.y - transform.position.y);
-               // leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - distance + targetOffset);
-                //footManager.GOinFront.transform.position = new Vector2(footManager.GOinFront.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
             }
             RaycastHit2D hitRight = Physics2D.Raycast(transform.GetChild(1).position, -Vector2.up, Mathf.Infinity, lm);
             if (hitRight.collider != null)
             {
                 rightDistance = Mathf.Abs(hitRight.point.y - transform.position.y);
-                //rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(1).position.y - distance + targetOffset);
-                //footManager.GOinFront.transform.position = new Vector2(footManager.GOinFront.transform.position.x, transform.GetChild(1).position.y - rightDisance + targetOffset);
             }
-            if (rightDistance < leftDistance)           //IF RIGHT IS HIGHER
+
+
+            if (isGrounded)
             {
-                if (footManager.GOinFront == rightTarget)   //IF RIGHT FOOT IN FRONT
+                if (rightDistance < leftDistance)           //IF RIGHT IS HIGHER
                 {
-                    print("1");
-                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset 
-                        -((transform.GetChild(1).position.x - rightTarget.transform.position.x)/4));//xdistance);
-                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
-                        -((transform.GetChild(0).position.x - leftTarget.transform.position.x)/4));
+                    if (footManager.GOinFront == rightTarget)   //IF RIGHT FOOT IN FRONT
+                    {
+                        print("1");
+                        rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
+                            - ((transform.GetChild(1).position.x - rightTarget.transform.position.x) / 4));//xdistance);
+                        leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
+                            - ((transform.GetChild(0).position.x - leftTarget.transform.position.x) / 4));
+                    }
+                    else
+                    {
+                        print("2");
+                        leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
+                            - ((transform.GetChild(1).position.x - leftTarget.transform.position.x) / 4));//xdistance);
+                        rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
+                            - ((transform.GetChild(0).position.x - rightTarget.transform.position.x) / 4));
+                    }
+                }
+                else if (leftDistance < rightDistance)                             //IF LEFT IS HIGHER
+                {
+                    if (footManager.GOinFront == rightTarget)
+                    {
+                        print("3");
+                        rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
+                            + ((transform.GetChild(1).position.x - rightTarget.transform.position.x) / 4));//xdistance);
+                        leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
+                            + ((transform.GetChild(0).position.x - leftTarget.transform.position.x) / 4));
+                    }
+                    else
+                    {
+                        print("4");
+                        leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
+                                                + ((transform.GetChild(1).position.x - leftTarget.transform.position.x) / 4));
+                        rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
+                                                    + ((transform.GetChild(0).position.x - rightTarget.transform.position.x) / 4));
+                    }
                 }
                 else
                 {
-                    print("2");
-                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
-                        - ((transform.GetChild(1).position.x - leftTarget.transform.position.x) / 4));//xdistance);
-                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
-                        - ((transform.GetChild(0).position.x - rightTarget.transform.position.x) / 4));
+                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
+                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(1).position.y - rightDistance + targetOffset);
                 }
-            }
-            else if (leftDistance < rightDistance)                             //IF LEFT IS HIGHER
-            {
-                if (footManager.GOinFront == rightTarget)
-                {
-                    print("3");
-                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
-                        + ((transform.GetChild(1).position.x - rightTarget.transform.position.x) / 4));//xdistance);
-                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
-                        + ((transform.GetChild(0).position.x - leftTarget.transform.position.x) / 4));
-                }
-                else
-                {
-                    print("4");
-                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
-                                            + ((transform.GetChild(1).position.x - leftTarget.transform.position.x) / 4));
-
-                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
-                                                + ((transform.GetChild(0).position.x - rightTarget.transform.position.x) / 4));//xdistance);
-
-                }
-
             }
             else
             {
-                leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
-                rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(1).position.y - rightDistance + targetOffset);
-
+                leftTarget.transform.position = new Vector2(transform.GetChild(0).position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
+                rightTarget.transform.position = new Vector2(transform.GetChild(1).position.x, transform.GetChild(1).position.y - rightDistance + targetOffset);
             }
 
 
@@ -187,35 +202,6 @@ public class Legs : MonoBehaviour
              * /
 
             
-
-            //facial features -- fix this!!
-
-            /*
-            if (rb.velocity.x >= 0f)
-            {
-                if (!fr.aiming)
-                {
-                    eyeWhite.transform.localPosition = Vector2.SmoothDamp(eyeWhite.transform.localPosition, new Vector2(0.17f, eyeWhite.transform.localPosition.y), ref refVelocity1, 0.2f, 50, Time.deltaTime);
-                    eyeBlack.transform.localPosition = Vector2.SmoothDamp(eyeBlack.transform.localPosition, new Vector2(0.23f, eyeBlack.transform.localPosition.y), ref refVelocity3, 0.2f, 50, Time.deltaTime);
-                    beak.transform.localPosition = Vector2.SmoothDamp(beak.transform.localPosition, new Vector2(0.451f, beak.transform.localPosition.y), ref refVelocity2, 0.2f, 50, Time.deltaTime);
-
-                    beak.transform.localScale = new Vector2(0.806f, Mathf.SmoothDamp(beak.transform.localScale.y, 0.806f, ref refV, Time.deltaTime * 10));
-
-                }
-            }
-            else if (rb.velocity.x < -.02f)
-            {
-                if (!fr.aiming)
-                {
-                    eyeWhite.transform.localPosition = Vector2.SmoothDamp(eyeWhite.transform.localPosition, new Vector2(-0.17f, eyeWhite.transform.localPosition.y), ref refVelocity1, 0.2f, 50, Time.deltaTime);
-                    eyeBlack.transform.localPosition = Vector2.SmoothDamp(eyeBlack.transform.localPosition, new Vector2(-0.23f, eyeBlack.transform.localPosition.y), ref refVelocity3, 0.2f, 50, Time.deltaTime);
-                    beak.transform.localPosition = Vector2.SmoothDamp(beak.transform.localPosition, new Vector2(-0.451f, beak.transform.localPosition.y), ref refVelocity2, 0.2f, 50, Time.deltaTime);
-
-                    beak.transform.localScale = new Vector2(-0.806f, Mathf.SmoothDamp(beak.transform.localScale.y, -0.806f, ref refV, Time.deltaTime * 10));
-
-                }
-
-            }
             */
 
         }

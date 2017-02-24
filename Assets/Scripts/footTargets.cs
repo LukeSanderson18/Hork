@@ -9,6 +9,7 @@ public class footTargets : MonoBehaviour {
     public GameObject rightFoot;
     public string inFront = "";
     public GameObject GOinFront;
+    public bool isPlayer;
 
     public float offset = 1.2f;
 
@@ -33,6 +34,7 @@ public class footTargets : MonoBehaviour {
         }
 		
         //move right
+        
         if (inFront == "right" && player.transform.position.x > rightFoot.transform.position.x)
         {
             leftFoot.transform.position = new Vector2(rightFoot.transform.position.x+offset, leftFoot.transform.position.y);
