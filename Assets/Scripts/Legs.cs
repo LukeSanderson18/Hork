@@ -64,6 +64,12 @@ public class Legs : MonoBehaviour
             rb.mass = 100;
             crouching = true;
         }
+        else if (ver > 0.4f)
+        {
+            rb.mass = 20;
+            crouching = false;
+        }
+
         else
         {
             rb.mass = 40;
@@ -143,7 +149,6 @@ public class Legs : MonoBehaviour
                 {
                     if (footManager.GOinFront == rightTarget)   //IF RIGHT FOOT IN FRONT
                     {
-                        print("1");
                         rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
                             - ((transform.GetChild(1).position.x - rightTarget.transform.position.x) / 4));//xdistance);
                         leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
@@ -151,7 +156,6 @@ public class Legs : MonoBehaviour
                     }
                     else
                     {
-                        print("2");
                         leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
                             - ((transform.GetChild(1).position.x - leftTarget.transform.position.x) / 4));//xdistance);
                         rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
@@ -162,7 +166,6 @@ public class Legs : MonoBehaviour
                 {
                     if (footManager.GOinFront == rightTarget)
                     {
-                        print("3");
                         rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
                             + ((transform.GetChild(1).position.x - rightTarget.transform.position.x) / 4));//xdistance);
                         leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
@@ -170,7 +173,6 @@ public class Legs : MonoBehaviour
                     }
                     else
                     {
-                        print("4");
                         leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
                                                 + ((transform.GetChild(1).position.x - leftTarget.transform.position.x) / 4));
                         rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
@@ -209,6 +211,7 @@ public class Legs : MonoBehaviour
         {
             rb.freezeRotation = false;
             rb.AddTorque(-hor * rollSpeed);
+            rb.AddForce(Vector3.right * hor * walkSpeed * 0.6f * Time.fixedDeltaTime);
             transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, Vector2.zero, Time.fixedDeltaTime * 20);
             transform.GetChild(1).localScale = Vector2.Lerp(transform.GetChild(1).localScale, Vector2.zero, Time.fixedDeltaTime * 20);
         }
