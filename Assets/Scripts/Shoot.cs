@@ -175,8 +175,8 @@ public class Shoot : MonoBehaviour {
             }
 
             proj.gameObject.SetActive(true);
-            proj.initialVelocity = (orangeSpeed * (orangeCharge * 0.6f) * 0.01f);
-            print((orangeSpeed * (orangeCharge*0.6f))*0.01f);
+            proj.initialVelocity = (orangeSpeed * (orangeCharge * 0.6f) * 0.006f);
+            //print("LINE ++ " + (orangeSpeed * (orangeCharge*0.6f))*0.01f);
         }
         else
         {

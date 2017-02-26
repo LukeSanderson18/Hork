@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Legs : MonoBehaviour
 {
+    public bool canTakeInput;
     public bool walking = true;
     bool crouching;
     public GameObject square;
-    float hor;
-    float ver;
+    public float hor;
+    public float ver;
     public bool isGrounded;
     public float walkSpeed = 5;
     public float jumpHeight = 6000;
@@ -46,34 +47,52 @@ public class Legs : MonoBehaviour
 
     void Update()
     {
-        hor = Input.GetAxis("Horizontal");
-        ver = Input.GetAxis("Vertical");
-        if (Input.GetAxis("Crouch") > 0.2f)
+        if (canTakeInput)
         {
-            walking = false;
-            square.SetActive(false);
-        }
-        else
-        {
-            walking = true;
-            square.SetActive(true);
-        }
+            hor = Input.GetAxis("Horizontal");
+            ver = Input.GetAxis("Vertical");
+            if (Input.GetAxis("Crouch") > 0.2f)
+            {
+                walking = false;
+                square.SetActive(false);
+            }
+            else
+            {
+                walking = true;
+                square.SetActive(true);
+            }
 
-        if(ver < -0.4f)
-        {
-            rb.mass = 100;
-            crouching = true;
-        }
-        else if (ver > 0.4f)
-        {
-            rb.mass = 20;
-            crouching = false;
-        }
 
-        else
-        {
-            rb.mass = 40;
-            crouching = false;
+            if (ver < -0.4f)
+            {
+                rb.mass = 100;
+                crouching = true;
+            }
+            else if (ver > 0.4f)
+            {
+                rb.mass = 20;
+                crouching = false;
+            }
+
+            else
+            {
+                rb.mass = 40;
+                crouching = false;
+            }
+            if (Input.GetButtonDown("Jump"))
+            {
+                if (foot1.GetComponent<groundCheck>().isGrounded && foot2.GetComponent<groundCheck>().isGrounded)
+                {
+                    if (crouching)
+                    {
+                        rb.velocity = rb.velocity + new Vector2(0, jumpHeight * 2f);
+                    }
+                    else
+                    {
+                        rb.velocity = rb.velocity + new Vector2(0, jumpHeight);
+                    }
+                }
+            }
         }
 
         if (foot1.GetComponent<groundCheck>().isGrounded || foot2.GetComponent<groundCheck>().isGrounded)
@@ -89,21 +108,8 @@ public class Legs : MonoBehaviour
             square.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
 
         }
-        //jump
-        if (Input.GetButtonDown("Jump"))
-        {
-            if (foot1.GetComponent<groundCheck>().isGrounded && foot2.GetComponent<groundCheck>().isGrounded)
-            {
-                if (crouching)
-                {
-                    rb.velocity = rb.velocity + new Vector2(0, jumpHeight * 2f);
-                }
-                else
-                {
-                    rb.velocity = rb.velocity + new Vector2(0, jumpHeight);
-                }
-            }
-        }
+
+
 
 
     }
@@ -192,9 +198,9 @@ public class Legs : MonoBehaviour
             }
 
 
-             
 
-            
+
+
             /*
             if (Input.GetAxis("Crouch") > 0.2f && isGrounded)
             {
@@ -216,6 +222,6 @@ public class Legs : MonoBehaviour
             transform.GetChild(1).localScale = Vector2.Lerp(transform.GetChild(1).localScale, Vector2.zero, Time.fixedDeltaTime * 20);
         }
 
-        
+
     }
 }
