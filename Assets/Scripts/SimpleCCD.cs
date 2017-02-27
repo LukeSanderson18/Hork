@@ -6,7 +6,7 @@ public class SimpleCCD : MonoBehaviour
 {
     public int iterations = 5;
 
-    [Range(0.01f, 2)]
+    [Range(0.01f, 1)]
     public float damping = 1;
 
     public Transform target;
@@ -28,8 +28,8 @@ public class SimpleCCD : MonoBehaviour
         // min & max has to be between 0 ... 360
         foreach (var node in angleLimits)
         {
-            node.min = Mathf.Clamp(node.min, -360, 360);
-            node.max = Mathf.Clamp(node.max, -360, 360);
+            node.min = Mathf.Clamp(node.min, 0, 360);
+            node.max = Mathf.Clamp(node.max, 0, 360);
         }
     }
 
@@ -84,9 +84,6 @@ public class SimpleCCD : MonoBehaviour
         // Calculate how much we should rotate to get to the target
         float angle = SignedAngle(toEnd, toTarget);
 
-        // Flip sign if character is turned around
-        angle *= Mathf.Sign(transform.root.localScale.x);
-
         // "Slows" down the IK solving
         angle *= damping;
 
@@ -94,13 +91,14 @@ public class SimpleCCD : MonoBehaviour
         angle = -(angle - transform.eulerAngles.z);
 
         // Take care of angle limits 
+        var sign = Mathf.Sign(transform.root.localScale.x);
         if (nodeCache.ContainsKey(transform))
         {
             // Clamp angle in local space
             var node = nodeCache[transform];
             float parentRotation = transform.parent ? transform.parent.eulerAngles.z : 0;
             angle -= parentRotation;
-            angle = ClampAngle(angle, node.min, node.max);
+            angle = ClampAngle(angle, sign, node.min, node.max);
             angle += parentRotation;
         }
 
@@ -115,9 +113,16 @@ public class SimpleCCD : MonoBehaviour
         return angle * sign;
     }
 
-    float ClampAngle(float angle, float min, float max)
+    float ClampAngle(float angle, float sign, float min, float max)
     {
         angle = Mathf.Abs((angle % 360) + 360) % 360;
+
+        if (sign < 0.0)
+        {
+            // Flip sign if character is turned around
+            return Mathf.Clamp(angle, 360 - max, 360 - min);
+        }
+
         return Mathf.Clamp(angle, min, max);
     }
 }
