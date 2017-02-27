@@ -25,10 +25,8 @@ public class EnemyHealth : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        print("hit.");
         if (collision.gameObject.GetComponent<BulletDamage>())
         {
-            print("HIT ME!");
 
             health -= collision.gameObject.GetComponent<BulletDamage>().bulletDam;
             SpriteRenderer[] sprites = GetComponentsInChildren<SpriteRenderer>();
@@ -79,7 +77,7 @@ public class EnemyHealth : MonoBehaviour
         {
             if (child)
             {
-                transform.root.GetComponent<Shake>().shakeDuration = 0.2f;
+                GetComponent<Shake>().shakeDuration = 0.2f;
                 Destroy(transform.root.gameObject, 0.5f);
                 alive = false;
             }

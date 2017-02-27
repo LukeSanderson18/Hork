@@ -26,11 +26,12 @@ public class Shake : MonoBehaviour
 
     void OnEnable()
     {
-        originalPos = camTransform.localPosition;
     }
 
     void Update()
     {
+        originalPos = camTransform.localPosition;
+
         if (shakeDuration > 0)
         {
             camTransform.localPosition = originalPos + Random.insideUnitSphere * shakeAmount;
