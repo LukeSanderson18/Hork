@@ -4,6 +4,8 @@ using System.Collections.Generic;
 [RequireComponent(typeof(EdgeCollider2D))]
 public class BezierCollider2D : MonoBehaviour
 {
+    public List<Vector2> points = new List<Vector2>();
+
     public Vector2 firstPoint;
     public Vector2 secondPoint;
 
@@ -30,8 +32,7 @@ public class BezierCollider2D : MonoBehaviour
 
     public Vector2[] calculate2DPoints()
     {
-        List<Vector2> points = new List<Vector2>();
-
+        points.Clear();
         points.Add(firstPoint);
         for (int i = 1; i < pointsQuantity; i++)
         {
@@ -39,7 +40,8 @@ public class BezierCollider2D : MonoBehaviour
             //do shit here you cretin
         }
         points.Add(secondPoint);
-
+        print("reached");
+        print(points[0]);
 
         return points.ToArray();
 

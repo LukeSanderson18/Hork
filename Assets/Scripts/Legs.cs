@@ -68,11 +68,12 @@ public class Legs : MonoBehaviour
                 rb.mass = 100;
                 crouching = true;
             }
-            else if (ver > 0.4f)
+           /* else if (ver > 0.4f)
             {
-                rb.mass = 20;
+               // rb.mass = 20;
                 crouching = false;
             }
+            * */
 
             else
             {

@@ -1,24 +1,39 @@
 ﻿using UnityEngine;
 
+[ExecuteInEditMode] 
 public class PolygonTester : MonoBehaviour
 {
+    public Material mat;
+    Mesh msh;
+
     void Start()
     {
+    }
+    void Update()
+    {
+        msh = new Mesh();
+
+
         // Create Vector2 vertices
-        Vector2[] vertices2D = new Vector2[] {
-            new Vector2(0,0),
-            new Vector2(0,50),
-            new Vector2(50,50),
-            new Vector2(50,100),
-            new Vector2(0,100),
-            new Vector2(0,150),
-            new Vector2(150,150),
-            new Vector2(150,100),
-            new Vector2(100,100),
-            new Vector2(100,50),
-            new Vector2(150,50),
-            new Vector2(150,0),
-        };
+
+        Vector2[] vertices2D = new Vector2[GetComponent<BezierCollider2D>().pointsQuantity+3];
+        for(int i = 0; i < GetComponent<BezierCollider2D>().pointsQuantity+3; i++)
+        {
+            if (i == GetComponent<BezierCollider2D>().pointsQuantity+1)
+            {
+                vertices2D[GetComponent<BezierCollider2D>().pointsQuantity+1] = new Vector2(GetComponent<BezierCollider2D>().points[i-1].x, GetComponent<BezierCollider2D>().points[i-1].y - 20);
+
+            }
+            else if (i == GetComponent<BezierCollider2D>().pointsQuantity + 2)
+            {
+                vertices2D[GetComponent<BezierCollider2D>().pointsQuantity + 2] = new Vector2(GetComponent<BezierCollider2D>().points[0].x, GetComponent<BezierCollider2D>().points[0].y - 20);
+
+            }
+            else
+            vertices2D[i] = GetComponent<BezierCollider2D>().points[i];
+        }
+
+        
 
         // Use the triangulator to get indices for creating triangles
         Triangulator tr = new Triangulator(vertices2D);
@@ -32,15 +47,14 @@ public class PolygonTester : MonoBehaviour
         }
 
         // Create the mesh
-        Mesh msh = new Mesh();
         msh.vertices = vertices;
         msh.triangles = indices;
         msh.RecalculateNormals();
         msh.RecalculateBounds();
 
         // Set up game object with mesh;
-        gameObject.AddComponent(typeof(MeshRenderer));
-        MeshFilter filter = gameObject.AddComponent(typeof(MeshFilter)) as MeshFilter;
+        //GetComponent<MeshRenderer>().material = mat;
+        MeshFilter filter = gameObject.GetComponent<MeshFilter>();
         filter.mesh = msh;
     }
 }
