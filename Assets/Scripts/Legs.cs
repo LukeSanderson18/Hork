@@ -107,14 +107,9 @@ public class Legs : MonoBehaviour
             isGrounded = false;
             footManager.gameObject.SetActive(false);
             square.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-
         }
-
-
-
-
     }
-    // Update is called once per frame
+
     void FixedUpdate()
     {
         if (walking)
@@ -137,70 +132,11 @@ public class Legs : MonoBehaviour
                 square.transform.position = new Vector2(transform.position.x, (transform.position.y - distance) + 1.22f);
             }
 
-            //slopes for feet
-            RaycastHit2D hitLeft = Physics2D.Raycast(transform.GetChild(0).position, -Vector2.up, Mathf.Infinity, lm);
-            if (hitLeft.collider != null)
-            {
-                leftDistance = Mathf.Abs(hitLeft.point.y - transform.position.y);
-            }
-            RaycastHit2D hitRight = Physics2D.Raycast(transform.GetChild(1).position, -Vector2.up, Mathf.Infinity, lm);
-            if (hitRight.collider != null)
-            {
-                rightDistance = Mathf.Abs(hitRight.point.y - transform.position.y);
-            }
-
-
-            if (isGrounded)
-            {
-                if (rightDistance < leftDistance)           //IF RIGHT IS HIGHER
-                {
-                    if (footManager.GOinFront == rightTarget)   //IF RIGHT FOOT IN FRONT
-                    {
-                        rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
-                            - ((transform.GetChild(1).position.x - rightTarget.transform.position.x) / 4));//xdistance);
-                        leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
-                            - ((transform.GetChild(0).position.x - leftTarget.transform.position.x) / 4));
-                    }
-                    else
-                    {
-                        leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
-                            - ((transform.GetChild(1).position.x - leftTarget.transform.position.x) / 4));//xdistance);
-                        rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
-                            - ((transform.GetChild(0).position.x - rightTarget.transform.position.x) / 4));
-                    }
-                }
-                else if (leftDistance < rightDistance)                             //IF LEFT IS HIGHER
-                {
-                    if (footManager.GOinFront == rightTarget)
-                    {
-                        rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
-                            + ((transform.GetChild(1).position.x - rightTarget.transform.position.x) / 4));//xdistance);
-                        leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
-                            + ((transform.GetChild(0).position.x - leftTarget.transform.position.x) / 4));
-                    }
-                    else
-                    {
-                        leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - rightDistance + targetOffset
-                                                + ((transform.GetChild(1).position.x - leftTarget.transform.position.x) / 4));
-                        rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset
-                                                    + ((transform.GetChild(0).position.x - rightTarget.transform.position.x) / 4));
-                    }
-                }
-                else
-                {
-                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
-                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, transform.GetChild(1).position.y - rightDistance + targetOffset);
-                }
-            }
-            else
+            if (!isGrounded)
             {
                 leftTarget.transform.position = new Vector2(transform.GetChild(0).position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
                 rightTarget.transform.position = new Vector2(transform.GetChild(1).position.x, transform.GetChild(1).position.y - rightDistance + targetOffset);
             }
-
-
-
-
 
             /*
             if (Input.GetAxis("Crouch") > 0.2f && isGrounded)
@@ -208,9 +144,7 @@ public class Legs : MonoBehaviour
                 print("called");
                 rb.velocity = rb.velocity + new Vector2(0, jumpHeight * 0.5f);
             }
-             * /
-
-            
+             * /      
             */
 
         }
@@ -223,6 +157,48 @@ public class Legs : MonoBehaviour
             transform.GetChild(1).localScale = Vector2.Lerp(transform.GetChild(1).localScale, Vector2.zero, Time.fixedDeltaTime * 20);
         }
 
+        RaycastHit2D hitLeft = Physics2D.Raycast(new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y + 1.6f), -Vector2.up, Mathf.Infinity, lm);
+        if (hitLeft.collider != null)
+        {
+            leftDistance = leftTarget.transform.position.y - hitLeft.point.y;
+         
+        }
+        RaycastHit2D hitRight = Physics2D.Raycast(new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y + 1.6f), -Vector2.up, Mathf.Infinity, lm);
+        if (hitRight.collider != null)
+        {
+            rightDistance = rightTarget.transform.position.y - hitRight.point.y;
+        }
+
+        if (isGrounded)
+        {
+            if (leftDistance != rightDistance)
+            {
+                if (footManager.GOinFront == rightTarget)   //IF RIGHT FOOT IN FRONT
+                {
+                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance);
+                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance);
+                }
+                else
+                {
+                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance);
+                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance);
+                }
+
+            }
+            else            //if floor is flat
+            {
+                leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance);
+                rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance);
+            }
+        }
+        else                //if not grounded
+        {
+            leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance);
+            rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance);
+        }
+
 
     }
+
+    
 }

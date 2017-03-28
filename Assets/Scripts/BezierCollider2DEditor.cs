@@ -59,6 +59,7 @@ public class BezierCollider2DEditor : Editor
 
         }
     }
+     
 
     void OnSceneGUI()
     {
@@ -80,7 +81,8 @@ public class BezierCollider2DEditor : Editor
             }
         }
     }
-
+    
     
 
 }
+

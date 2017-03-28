@@ -27,7 +27,7 @@ public class EnemyHealth : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<BulletDamage>())
         {
-
+            print("hit me!");
             health -= collision.gameObject.GetComponent<BulletDamage>().bulletDam;
             SpriteRenderer[] sprites = GetComponentsInChildren<SpriteRenderer>();
             StartCoroutine(FlashSprites(sprites, 1, 0.09f));

@@ -5,13 +5,5 @@ using UnityEngine;
 public class BulletDamage : MonoBehaviour {
 
     public int bulletDam;
-	// Use this for initialization
-	void Start () {
-		
-	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class footTargets : MonoBehaviour {
 
     public GameObject player;
+    Legs legs;
     public GameObject leftFoot;
     public GameObject rightFoot;
     public string inFront = "";
@@ -16,7 +17,7 @@ public class footTargets : MonoBehaviour {
     float refVel;
 	// Use this for initialization
 	void Start () {
-		
+        legs = player.GetComponent<Legs>();
 	}
 	
 	// Update is called once per frame
