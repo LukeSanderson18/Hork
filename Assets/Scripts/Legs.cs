@@ -157,18 +157,21 @@ public class Legs : MonoBehaviour
             transform.GetChild(1).localScale = Vector2.Lerp(transform.GetChild(1).localScale, Vector2.zero, Time.fixedDeltaTime * 20);
         }
 
-        RaycastHit2D hitLeft = Physics2D.Raycast(new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y + 1.6f), -Vector2.up, Mathf.Infinity, lm);
+        //RAYCASTS FOR LEGS HITTING FLOOR
+        //FIDDLE WITH THIS SHIT
+        RaycastHit2D hitLeft = Physics2D.Raycast(new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y + 1.55f), -Vector2.up, Mathf.Infinity, lm);
         if (hitLeft.collider != null)
         {
             leftDistance = leftTarget.transform.position.y - hitLeft.point.y;
          
         }
-        RaycastHit2D hitRight = Physics2D.Raycast(new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y + 1.6f), -Vector2.up, Mathf.Infinity, lm);
+        RaycastHit2D hitRight = Physics2D.Raycast(new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y + 1.55f), -Vector2.up, Mathf.Infinity, lm);
         if (hitRight.collider != null)
         {
             rightDistance = rightTarget.transform.position.y - hitRight.point.y;
         }
 
+        //I KNOW THIS SHIT IS ALL THE SAME BUT IT LEGIT CRASHES IF I DONT SO... ???
         if (isGrounded)
         {
             if (leftDistance != rightDistance)
