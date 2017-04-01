@@ -41,30 +41,31 @@ public class LukeBezier : MonoBehaviour {
                 endPoint = nextBrotherNode.transform.position;
 
                 //lr.SetVertexCount(((transform.childCount*noOfSegments)-noOfSegments)+2);
-                lr.SetVertexCount(21);
+                lr.SetVertexCount(41);
                // lr.SetVertexCount((transform.childCount * noOfSegments)-noOfSegments)+1);
                 // print(lr.numCapVertices);
                 if (index == 0)
                 {
                     for (int i = 0; i < noOfSegments+1; i++)
                     {
-                        print(i);
+                      //  print(i);
                         GetBezier(i / (float)(noOfSegments));
                         lr.SetPosition(i, bezierPoint);
                     }
                 }
-                /*else
+                else
                 {
-                    for (int i = (noOfSegments * index) - 1; i <= ((noOfSegments * index) + noOfSegments)-1; i++)
+                    print(index);
+                    for (int i = (noOfSegments * index)+1; i <= ((noOfSegments * index) + noOfSegments) + 1; i++)
                     {
-                        print(i);
+                        //  print(i);
                         // if (i != (noOfSegments*index) - 1)
                         {
-                            GetBezier(i / (float)(noOfSegments + (index * noOfSegments)));
+                            GetBezier(i / (float)(noOfSegments + (index * noOfSegments))-1);
                             lr.SetPosition(i, bezierPoint);
                         }
                     }
-                }*/
+                }
 
             }
         }     

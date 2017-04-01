@@ -13,7 +13,7 @@ public class CreateTarget : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B) || Input.GetKeyDown("joystick button 1"))
         {
             Instantiate(prefab, transform.position, transform.rotation);
         }
