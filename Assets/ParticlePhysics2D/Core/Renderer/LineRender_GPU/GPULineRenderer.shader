@@ -1,4 +1,6 @@
-﻿
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+
 
 //Yves Wang @ FISH, 2015, All rights reserved
 
@@ -84,7 +86,7 @@ Shader "ParticlePhysics2D/GPULineRenderer" {
 					float2 posB = tex2Dlod ( _PositionRT , IN.cl.zw );
 					IN.vertex.xy = AngledPoint ( posA, posM, posB);
 				}
-				o.pos = mul ( UNITY_MATRIX_MVP , IN.vertex);
+				o.pos = UnityObjectToClipPos (  IN.vertex);
 				return o;
 			}
 			

@@ -1,4 +1,6 @@
-﻿
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+
 //Yves Wang @ FISH, 2015, All rights reserved
 
 Shader "ParticlePhysics2D/AngleDelta" {
@@ -61,7 +63,7 @@ Shader "ParticlePhysics2D/AngleDelta" {
 				v2f o;
 				o.uv = half4(v.texcoord.x,v.texcoord.y,v.vertex.z,0);
 				v.vertex.z = 0;//this is where I was caught by a bug....have to explicitly set it to 0 before mul with mvp
-				o.pos = mul ( UNITY_MATRIX_MVP , v.vertex);
+				o.pos = UnityObjectToClipPos (  v.vertex);
 				o.pos.xy = v.vertex.xy * 2 -1;
 				o.cl = v.cl;
 				

@@ -1,4 +1,6 @@
-﻿Shader "Custom/multipasstest" {
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/multipasstest" {
 	
 	SubShader {
 		Tags {
@@ -44,7 +46,7 @@
 				//get the delta
 				v2f_mt OUT;
 				IN.vertex -= 0.5;
-				OUT.pos = mul ( UNITY_MATRIX_MVP , IN.vertex );
+				OUT.pos = UnityObjectToClipPos (  IN.vertex );
 				colortest = float4(0,1,0,0);
 				OUT.color = colortest;
 				return OUT;
@@ -70,7 +72,7 @@
 				UNITY_INITIALIZE_OUTPUT (appdata_mt,IN);
 				//get the delta
 				v2f_mt OUT;
-				OUT.pos = mul ( UNITY_MATRIX_MVP , IN.vertex );
+				OUT.pos = UnityObjectToClipPos (  IN.vertex );
 				//OUT.color = colortest;
 				return OUT;
 			}

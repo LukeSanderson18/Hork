@@ -1,4 +1,6 @@
-﻿Shader "test" {
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "test" {
 	Properties {
 		
 		
@@ -32,7 +34,7 @@
 			v2f_test vert_test( appdata_test v )
 			{
 				v2f_test o;
-				o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
+				o.pos = UnityObjectToClipPos (v.vertex);
 				o.uv = v.texcoord;
 				o.fpos = o.pos;
 				return o;

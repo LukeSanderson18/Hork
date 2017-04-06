@@ -1,4 +1,6 @@
-﻿
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+
 
 //Yves Wang @ FISH, 2015, All rights reserved
 Shader "ParticlePhysics2D/MeshLineRender_Glow11"
@@ -58,7 +60,7 @@ Shader "ParticlePhysics2D/MeshLineRender_Glow11"
 			{
 				v2f OUT;
 				//float4 v = float4(IN.vertex,0);
-				OUT.vertex = mul(UNITY_MATRIX_MVP, IN.vertex);
+				OUT.vertex = UnityObjectToClipPos(IN.vertex);
 				//OUT.vertex = IN.texcoord;
 				//OUT.texcoord = IN.texcoord;
 				//OUT.color = IN.color * _Color;
