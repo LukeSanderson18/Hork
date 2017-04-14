@@ -165,14 +165,25 @@ public class Legs : MonoBehaviour
         //RAYCASTS FOR LEGS HITTING FLOOR
         //FIDDLE WITH THIS SHIT
 
+        //
+
+        ///
+        //
+        //
+        //TO DO
+        //
+        //CONVERT LEFT DISTNACE AND RIGHT DISTANCE INTO VECTOR2S
+        //
+        //THATS IT
+
         //THESE HAVE NOTHING TO DO WITH ACTUALLY MOVING THE PLAYER, JUST FOR LEG A E S T H E T I C
-        RaycastHit2D hitLeft = Physics2D.Raycast(new Vector2(leftTarget.transform.position.x + gravityDirection.x, leftTarget.transform.position.y + (1.55f*-gravityDirection.y)), gravityDirection, Mathf.Infinity, lm);
+        RaycastHit2D hitLeft = Physics2D.Raycast(new Vector2(leftTarget.transform.position.x - gravityDirection.x, leftTarget.transform.position.y + (1.55f*-gravityDirection.y)), gravityDirection, Mathf.Infinity, lm);
         if (hitLeft.collider != null)
         {
             leftDistance = leftTarget.transform.position.y - hitLeft.point.y;
          
         }
-        RaycastHit2D hitRight = Physics2D.Raycast(new Vector2(rightTarget.transform.position.x + gravityDirection.x, rightTarget.transform.position.y + (1.55f*-gravityDirection.y)), gravityDirection, Mathf.Infinity, lm);
+        RaycastHit2D hitRight = Physics2D.Raycast(new Vector2(rightTarget.transform.position.x - gravityDirection.x, rightTarget.transform.position.y + (1.55f*-gravityDirection.y)), gravityDirection, Mathf.Infinity, lm);
         if (hitRight.collider != null)
         {
             rightDistance = rightTarget.transform.position.y - hitRight.point.y;
