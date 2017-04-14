@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Legs : MonoBehaviour
 {
+    public Vector2 gravityDirection = -Vector2.up;
+    public Transform rotater;
+    public float gravityScale = 3;
     public bool canTakeInput;
     public bool walking = true;
     bool crouching;
@@ -51,6 +54,7 @@ public class Legs : MonoBehaviour
         {
             hor = Input.GetAxis("Horizontal");
             ver = Input.GetAxis("Vertical");
+
             if (Input.GetAxis("Crouch") > 0.2f)
             {
                 walking = false;
@@ -68,13 +72,6 @@ public class Legs : MonoBehaviour
                 rb.mass = 100;
                 crouching = true;
             }
-           /* else if (ver > 0.4f)
-            {
-               // rb.mass = 20;
-                crouching = false;
-            }
-            * */
-
             else
             {
                 rb.mass = 40;
@@ -86,11 +83,11 @@ public class Legs : MonoBehaviour
                 {
                     if (crouching)
                     {
-                        rb.velocity = rb.velocity + new Vector2(0, jumpHeight * 2f);
+                        rb.velocity = rb.velocity + (-gravityDirection * jumpHeight * 2);//new Vector2(0, jumpHeight);
                     }
                     else
                     {
-                        rb.velocity = rb.velocity + new Vector2(0, jumpHeight);
+                        rb.velocity = rb.velocity + (-gravityDirection * jumpHeight);//new Vector2(0, jumpHeight);
                     }
                 }
             }
@@ -114,42 +111,50 @@ public class Legs : MonoBehaviour
     {
         if (walking)
         {
-            transform.GetChild(0).localScale = Vector2.Lerp(transform.GetChild(0).localScale, new Vector2(0.2f, 0.2f), Time.fixedDeltaTime * 20);
-            transform.GetChild(1).localScale = Vector2.Lerp(transform.GetChild(1).localScale, new Vector2(0.2f, 0.2f), Time.fixedDeltaTime * 20);
+            transform.GetChild(0).transform.GetChild(0).localScale = Vector2.Lerp( transform.GetChild(0).transform.GetChild(0).localScale, new Vector2(0.2f, 0.2f), Time.fixedDeltaTime * 20);
+            transform.GetChild(0). transform.GetChild(1).localScale = Vector2.Lerp( transform.GetChild(0).transform.GetChild(1).localScale, new Vector2(0.2f, 0.2f), Time.fixedDeltaTime * 20);
 
             //move
-            rb.AddForce(Vector3.right * hor * walkSpeed * Time.fixedDeltaTime);
+            rb.AddForce(Vector3.right * ((hor * Mathf.Abs(gravityDirection.y))) * walkSpeed * Time.fixedDeltaTime);
+            rb.AddForce(Vector3.up * ((ver * Mathf.Abs(gravityDirection.x))) * walkSpeed * Time.fixedDeltaTime);
 
             var rot = Quaternion.FromToRotation(transform.up, Vector3.up);
             rb.rotation = 0;
             rb.freezeRotation = true;
 
-            //bounce == square
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up, Mathf.Infinity, lm);
-            if (hit.collider != null)
-            {
-                float distance = Mathf.Abs(hit.point.y - transform.position.y);
-                square.transform.position = new Vector2(transform.position.x, (transform.position.y - distance) + 1.22f);
-            }
-
             if (!isGrounded)
             {
-                leftTarget.transform.position = new Vector2(transform.GetChild(0).position.x, transform.GetChild(0).position.y - leftDistance + targetOffset);
-                rightTarget.transform.position = new Vector2(transform.GetChild(1).position.x, transform.GetChild(1).position.y - rightDistance + targetOffset);
+                leftTarget.transform.position = new Vector2( transform.GetChild(0).transform.GetChild(0).position.x,  transform.GetChild(0).transform.GetChild(0).position.y - leftDistance + targetOffset);
+                rightTarget.transform.position = new Vector2( transform.GetChild(0).transform.GetChild(1).position.x,  transform.GetChild(0).transform.GetChild(1).position.y - rightDistance + targetOffset);
             }
 
-            /*
-            if (Input.GetAxis("Crouch") > 0.2f && isGrounded)
+            rb.AddForce(gravityDirection * gravityScale * Physics.gravity.y);
+
+            RaycastHit2D downHit = Physics2D.Raycast(transform.position, gravityDirection, 2.3f, lm);
+            if (downHit.collider != null)
             {
-                print("called");
-                rb.velocity = rb.velocity + new Vector2(0, jumpHeight * 0.5f);
+                rb.AddForce(-gravityDirection * gravityScale * Physics.gravity.y * 1.5f);
             }
-             * /      
-            */
+
+            RaycastHit2D downHit2 = Physics2D.Raycast(new Vector2(transform.position.x+0.02f,transform.position.y), gravityDirection, 2.3f, lm);
+            if (downHit2.collider != null)
+            {
+                print(downHit2.normal);
+                gravityDirection = -downHit2.normal;
+                rotater.rotation = Quaternion.FromToRotation(Vector3.up, new Vector3(downHit2.normal.x,downHit2.normal.y,0));
+                //rb.AddForce(-gravityDirection * gravityScale * Physics.gravity.y * 1.5f);
+            }
+            else
+            {
+            //    gravityDirection = new Vector2(0, -1);
+            }
+
+
 
         }
-        else
+        else        //PLAYER IS ROLLING
         {
+            gravityDirection = -Vector2.up;
             rb.freezeRotation = false;
             rb.AddTorque(-hor * rollSpeed);
             rb.AddForce(Vector3.right * hor * walkSpeed * 0.6f * Time.fixedDeltaTime);
@@ -159,13 +164,15 @@ public class Legs : MonoBehaviour
 
         //RAYCASTS FOR LEGS HITTING FLOOR
         //FIDDLE WITH THIS SHIT
-        RaycastHit2D hitLeft = Physics2D.Raycast(new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y + 1.55f), -Vector2.up, Mathf.Infinity, lm);
+
+        //THESE HAVE NOTHING TO DO WITH ACTUALLY MOVING THE PLAYER, JUST FOR LEG A E S T H E T I C
+        RaycastHit2D hitLeft = Physics2D.Raycast(new Vector2(leftTarget.transform.position.x + gravityDirection.x, leftTarget.transform.position.y + (1.55f*-gravityDirection.y)), gravityDirection, Mathf.Infinity, lm);
         if (hitLeft.collider != null)
         {
             leftDistance = leftTarget.transform.position.y - hitLeft.point.y;
          
         }
-        RaycastHit2D hitRight = Physics2D.Raycast(new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y + 1.55f), -Vector2.up, Mathf.Infinity, lm);
+        RaycastHit2D hitRight = Physics2D.Raycast(new Vector2(rightTarget.transform.position.x + gravityDirection.x, rightTarget.transform.position.y + (1.55f*-gravityDirection.y)), gravityDirection, Mathf.Infinity, lm);
         if (hitRight.collider != null)
         {
             rightDistance = rightTarget.transform.position.y - hitRight.point.y;
@@ -174,30 +181,32 @@ public class Legs : MonoBehaviour
         //I KNOW THIS SHIT IS ALL THE SAME BUT IT LEGIT CRASHES IF I DONT SO... ???
         if (isGrounded)
         {
+            
             if (leftDistance != rightDistance)
             {
                 if (footManager.GOinFront == rightTarget)   //IF RIGHT FOOT IN FRONT
                 {
-                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance);
-                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance);
+                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x , leftTarget.transform.position.y - leftDistance);
+                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x , rightTarget.transform.position.y - rightDistance);
                 }
                 else
                 {
-                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance);
-                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance);
+                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x , leftTarget.transform.position.y - leftDistance);
+                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x , rightTarget.transform.position.y - rightDistance);
                 }
 
             }
             else            //if floor is flat
             {
+                print("distance same!");
                 leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance);
-                rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance);
+                rightTarget.transform.position = new Vector2(rightTarget.transform.position.x , rightTarget.transform.position.y - rightDistance);
             }
         }
         else                //if not grounded
         {
             leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance);
-            rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance);
+            rightTarget.transform.position = new Vector2(rightTarget.transform.position.x , rightTarget.transform.position.y - rightDistance);
         }
 
 
