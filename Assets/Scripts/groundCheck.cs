@@ -20,7 +20,7 @@ public class groundCheck : MonoBehaviour {
 	void FixedUpdate () {
         gravityDirection = mainSprite.gravityDirection;
         RaycastHit2D hitLeft = Physics2D.Raycast(new Vector2(transform.position.x + -gravityDirection.x*0.5f, transform.position.y + -gravityDirection.y*0.5f), gravityDirection, distance, lm);
-        Debug.DrawRay(new Vector2(transform.position.x + -gravityDirection.x*0.5f, transform.position.y + -gravityDirection.y*0.5f), gravityDirection, Color.green, distance);
+      //  Debug.DrawRay(new Vector2(transform.position.x + -gravityDirection.x*0.5f, transform.position.y + -gravityDirection.y*0.5f), gravityDirection, Color.green, distance);
         //if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + yOffset, transform.position.z), -Vector2.up, distance)) 
         if (hitLeft.collider != null)
         {
