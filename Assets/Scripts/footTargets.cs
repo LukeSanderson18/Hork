@@ -17,6 +17,9 @@ public class footTargets : MonoBehaviour
 
     public float offset = 1.2f;
 
+    float readyTimer;
+    bool touching;
+
     float refVel;
     // Use this for initialization
     void Start()
@@ -69,21 +72,35 @@ public class footTargets : MonoBehaviour
 
         rightFoot.transform.eulerAngles = leftFoot.transform.eulerAngles = new Vector3(0, 0, rotator.eulerAngles.z);
 
-        RaycastHit2D hitLeft = Physics2D.Raycast(leftFoot.transform.position, -legs.gravityDirection, 5, lm);
+        RaycastHit2D hitLeft = Physics2D.Raycast(leftFoot.transform.position, -legs.gravityDirection, 20, lm);
+        RaycastHit2D hitRight = Physics2D.Raycast(rightFoot.transform.position, -legs.gravityDirection, 20, lm);
+
         if (hitLeft.collider != null)
         {
-            print("PLAYSDYASDYSADI)SADYI");
-            Ting(0);
+            if (!touching)
+            {
+                print("PLAYSDYASDYSADI)SADYI");
+                Ting(0);
+                touching = true;
+            }
         }
-            RaycastHit2D hitRight = Physics2D.Raycast(rightFoot.transform.position, -legs.gravityDirection, 5, lm);
-        if (hitRight.collider != null)
+        else if (hitRight.collider != null)
         {
-            print("RIGHTIH SIAFHASHIF");
-            Ting(1);
+            if (!touching)
+            {
+                print("RIGHTIH SIAFHASHIF");
+                Ting(1);
+                touching = true;
+            }
         }
-        Debug.DrawRay(leftFoot.transform.position, -legs.gravityDirection, Color.yellow, 2);
+        else
+        {
+            touching = false;
+        }
+        //print(touching())
+      //  Debug.DrawRay(leftFoot.transform.position, -legs.gravityDirection, Color.yellow, 2);
 
-
+        
 
 
     }

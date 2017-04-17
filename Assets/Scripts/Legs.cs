@@ -6,7 +6,8 @@ public class Legs : MonoBehaviour
 {
     public Vector2 gravityDirection = -Vector2.up;
     public Transform rotater;
-    public float gravityScale = 3;
+    public float gravityUpScale = 3;
+    public float gravityDownScale = 3;
     public bool canTakeInput;
     public bool walking = true;
     bool crouching;
@@ -50,7 +51,13 @@ public class Legs : MonoBehaviour
 
     void Update()
     {
-     //   print(gravityDirection);
+
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            Application.LoadLevel(Application.loadedLevel);
+        }
+
+        //   print(gravityDirection);
         if (canTakeInput)
         {
             hor = Input.GetAxis("Horizontal");
@@ -70,12 +77,12 @@ public class Legs : MonoBehaviour
 
             if (ver < -0.4f)
             {
-                rb.mass = 100;
+               // rb.mass = 100;
                 crouching = true;
             }
             else
             {
-                rb.mass = 40;
+             //   rb.mass = 40;
                 crouching = false;
             }
             if (Input.GetButtonDown("Jump"))
@@ -129,15 +136,18 @@ public class Legs : MonoBehaviour
               //  rightTarget.transform.position = new Vector2(transform.GetChild(0).transform.GetChild(1).position.x,  transform.GetChild(0).transform.GetChild(1).position.y - rightDistance.y + targetOffset);
             }
 
-            rb.AddForce(gravityDirection * gravityScale * Physics.gravity.y);
+            //for uppage
+            rb.AddForce(gravityDirection * gravityDownScale * Physics.gravity.y);
 
             RaycastHit2D downHit = Physics2D.Raycast(transform.position, gravityDirection, 2.3f, lm);
-            if (downHit.collider != null)
+            if (downHit.collider == null)
             {
-                rb.AddForce(-gravityDirection * gravityScale * Physics.gravity.y * 1.5f);
+                print("SHITTING");
+               rb.AddForce(-gravityDirection * gravityUpScale * Physics.gravity.y * 1.5f);
             }
+            Debug.DrawRay(transform.position,gravityDirection,Color.red,3);
 
-            RaycastHit2D downHit2 = Physics2D.Raycast(new Vector2(transform.position.x+0.0f,transform.position.y), gravityDirection, 2.3f, lm);
+            RaycastHit2D downHit2 = Physics2D.Raycast(new Vector2(transform.position.x,transform.position.y), gravityDirection, 10f, lm);
             if (downHit2.collider != null)
             {
             //    print(downHit2.normal);
@@ -166,10 +176,10 @@ public class Legs : MonoBehaviour
        // print(gravityDirection);
 
 
-        if(false)
+        if(true)
         {
             RaycastHit2D hitLeft = Physics2D.Raycast(new Vector2(leftTarget.transform.position.x - gravityDirection.x, leftTarget.transform.position.y + (1.55f * -gravityDirection.y)), gravityDirection, Mathf.Infinity, lm);
-            Debug.DrawRay(new Vector2(leftTarget.transform.position.x - gravityDirection.x, leftTarget.transform.position.y + (0.55f * -gravityDirection.y)), gravityDirection, Color.red, 0.1f);
+           // Debug.DrawRay(new Vector2(leftTarget.transform.position.x - gravityDirection.x, leftTarget.transform.position.y + (0.55f * -gravityDirection.y)), gravityDirection, Color.red, 0.1f);
             if (hitLeft.collider != null)
             {
                 leftDistance = (Vector2)leftTarget.transform.position - hitLeft.point;
@@ -185,10 +195,10 @@ public class Legs : MonoBehaviour
             {
                 if (leftDistance != rightDistance)
                 {
-                    if (footManager.GOinFront == rightTarget)   //IF RIGHT FOOT IN FRONT
+                    if (footManager.inFront == "right")   //IF RIGHT FOOT IN FRONT
                     {
-                        leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance.y);
-                        rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance.y);
+                        leftTarget.transform.position = new Vector2(leftTarget.transform.position.x , leftTarget.transform.position.y - leftDistance.y);
+                        rightTarget.transform.position = new Vector2(rightTarget.transform.position.x , rightTarget.transform.position.y - rightDistance.y);
                     }
                     else
                     {
@@ -209,6 +219,8 @@ public class Legs : MonoBehaviour
                 rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance.y);
             }
         }
+
+        
         //Debug.Log("FHAJSFH");
         //RAYCASTS FOR LEGS HITTING FLOOR
         //FIDDLE WITH THIS SHIT
