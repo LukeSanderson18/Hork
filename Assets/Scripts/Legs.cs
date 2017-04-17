@@ -125,8 +125,8 @@ public class Legs : MonoBehaviour
 
             if (!isGrounded)
             {
-                leftTarget.transform.position = new Vector2(transform.GetChild(0).transform.GetChild(0).position.x,  transform.GetChild(0).transform.GetChild(0).position.y - leftDistance.y + targetOffset);
-                rightTarget.transform.position = new Vector2(transform.GetChild(0).transform.GetChild(1).position.x,  transform.GetChild(0).transform.GetChild(1).position.y - rightDistance.y + targetOffset);
+              //  leftTarget.transform.position = new Vector2(transform.GetChild(0).transform.GetChild(0).position.x,  transform.GetChild(0).transform.GetChild(0).position.y - leftDistance.y + targetOffset);
+              //  rightTarget.transform.position = new Vector2(transform.GetChild(0).transform.GetChild(1).position.x,  transform.GetChild(0).transform.GetChild(1).position.y - rightDistance.y + targetOffset);
             }
 
             rb.AddForce(gravityDirection * gravityScale * Physics.gravity.y);
@@ -137,7 +137,7 @@ public class Legs : MonoBehaviour
                 rb.AddForce(-gravityDirection * gravityScale * Physics.gravity.y * 1.5f);
             }
 
-            RaycastHit2D downHit2 = Physics2D.Raycast(new Vector2(transform.position.x+0.02f,transform.position.y), gravityDirection, 2.3f, lm);
+            RaycastHit2D downHit2 = Physics2D.Raycast(new Vector2(transform.position.x+0.0f,transform.position.y), gravityDirection, 2.3f, lm);
             if (downHit2.collider != null)
             {
             //    print(downHit2.normal);
@@ -163,6 +163,52 @@ public class Legs : MonoBehaviour
             transform.GetChild(1).localScale = Vector2.Lerp(transform.GetChild(1).localScale, Vector2.zero, Time.fixedDeltaTime * 20);
         }
 
+       // print(gravityDirection);
+
+
+        if(false)
+        {
+            RaycastHit2D hitLeft = Physics2D.Raycast(new Vector2(leftTarget.transform.position.x - gravityDirection.x, leftTarget.transform.position.y + (1.55f * -gravityDirection.y)), gravityDirection, Mathf.Infinity, lm);
+            Debug.DrawRay(new Vector2(leftTarget.transform.position.x - gravityDirection.x, leftTarget.transform.position.y + (0.55f * -gravityDirection.y)), gravityDirection, Color.red, 0.1f);
+            if (hitLeft.collider != null)
+            {
+                leftDistance = (Vector2)leftTarget.transform.position - hitLeft.point;
+            }
+            RaycastHit2D hitRight = Physics2D.Raycast(new Vector2(rightTarget.transform.position.x - gravityDirection.x, rightTarget.transform.position.y + (1.55f * -gravityDirection.y)), gravityDirection, Mathf.Infinity, lm);
+            if (hitRight.collider != null)
+            {
+                rightDistance = (Vector2)rightTarget.transform.position - hitRight.point;
+            }
+
+            //I KNOW THIS SHIT IS ALL THE SAME BUT IT LEGIT CRASHES IF I DONT SO... ???
+            if (isGrounded)
+            {
+                if (leftDistance != rightDistance)
+                {
+                    if (footManager.GOinFront == rightTarget)   //IF RIGHT FOOT IN FRONT
+                    {
+                        leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance.y);
+                        rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance.y);
+                    }
+                    else
+                    {
+                        leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance.y);
+                        rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance.y);
+                    }
+                }
+                else            //if floor is flat
+                {
+                    //   print("distance same!");
+                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance.y);
+                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance.y);
+                }
+            }
+            else                //if not grounded
+            {
+                leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance.y);
+                rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance.y);
+            }
+        }
         //Debug.Log("FHAJSFH");
         //RAYCASTS FOR LEGS HITTING FLOOR
         //FIDDLE WITH THIS SHIT
@@ -179,55 +225,16 @@ public class Legs : MonoBehaviour
         //THATS IT
 
         //THESE HAVE NOTHING TO DO WITH ACTUALLY MOVING THE PLAYER, JUST FOR LEG A E S T H E T I C
-        RaycastHit2D hitLeft = Physics2D.Raycast(new Vector2(leftTarget.transform.position.x - gravityDirection.x, leftTarget.transform.position.y + (1.55f*-gravityDirection.y)), gravityDirection, Mathf.Infinity, lm);
-        Debug.DrawRay(new Vector2(leftTarget.transform.position.x - gravityDirection.x, leftTarget.transform.position.y + (0.55f * -gravityDirection.y)), gravityDirection, Color.red, 0.1f);
-        if (hitLeft.collider != null)
-        {
-            leftDistance = (Vector2)leftTarget.transform.position - hitLeft.point;
-           // print(leftDistance);
-         
-        }
-        RaycastHit2D hitRight = Physics2D.Raycast(new Vector2(rightTarget.transform.position.x - gravityDirection.x, rightTarget.transform.position.y + (1.55f*-gravityDirection.y)), gravityDirection, Mathf.Infinity, lm);
-        if (hitRight.collider != null)
-        {
-            rightDistance = (Vector2)rightTarget.transform.position - hitRight.point;
-        }
-        
-        //I KNOW THIS SHIT IS ALL THE SAME BUT IT LEGIT CRASHES IF I DONT SO... ???
-        if (isGrounded)
-        { 
-            if (leftDistance != rightDistance)
-            {
-                if (footManager.GOinFront == rightTarget)   //IF RIGHT FOOT IN FRONT
-                {
-                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance.y);
-                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance.y);
-                }
-                else
-                {
-                    leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance.y);
-                    rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance.y);
-                }
-            }
-            else            //if floor is flat
-            {
-             //   print("distance same!");
-                leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance.y);
-                rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance.y);
-            }
-        }
-        else                //if not grounded
-        {
-            leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance.y);
-            rightTarget.transform.position = new Vector2(rightTarget.transform.position.x , rightTarget.transform.position.y - rightDistance.y);
-        }
 
-        print(leftDistance);
-         
-
+        /*
         
+        
+
+         
+    /**/
+
     }
-         
 
-    
+
+
 }

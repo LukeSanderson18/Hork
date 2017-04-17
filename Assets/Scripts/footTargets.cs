@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class footTargets : MonoBehaviour {
+public class footTargets : MonoBehaviour
+{
 
+    public LayerMask lm;
     public GameObject player;
+    public Transform rotator;
     Legs legs;
     public GameObject leftFoot;
     public GameObject rightFoot;
@@ -15,88 +18,146 @@ public class footTargets : MonoBehaviour {
     public float offset = 1.2f;
 
     float refVel;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         legs = player.GetComponent<Legs>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
 
-        if (Mathf.Abs(legs.gravityDirection.x) < Mathf.Abs(legs.gravityDirection.y))
+    // Update is called once per frame
+    void Update()
+    {
+
+
+        //move right
+
+        if (false)
         {
-            if (rightFoot.transform.position.x > leftFoot.transform.position.x)
-            {
-                inFront = "right";
-                GOinFront = rightFoot;
-            }
-            else
-            {
-                inFront = "left";
-                GOinFront = leftFoot;
-            }
-
-            //move right
+            print(player.transform.position.x * -legs.gravityDirection.y + ", " + rightFoot.transform.position.x * -legs.gravityDirection.y);
 
             if (inFront == "right" && player.transform.position.x > rightFoot.transform.position.x)
             {
-                leftFoot.transform.position = new Vector2(rightFoot.transform.position.x + offset, leftFoot.transform.position.y);
+                leftFoot.transform.position = new Vector2(rightFoot.transform.position.x + offset * -legs.gravityDirection.y, rightFoot.transform.position.y + offset * legs.gravityDirection.x);
+                inFront = "left";
+                GOinFront = leftFoot;
             }
 
             else if (inFront == "left" && player.transform.position.x > leftFoot.transform.position.x)
             {
-                rightFoot.transform.position = new Vector2(leftFoot.transform.position.x + offset, rightFoot.transform.position.y);
+                rightFoot.transform.position = new Vector2(leftFoot.transform.position.x + offset * -legs.gravityDirection.y, leftFoot.transform.position.y + offset * legs.gravityDirection.x);
+                inFront = "right";
+                GOinFront = rightFoot;
             }
+
 
             //move left
             else if (inFront == "right" && player.transform.position.x < leftFoot.transform.position.x)
             {
-                rightFoot.transform.position = new Vector2(leftFoot.transform.position.x - offset, rightFoot.transform.position.y);
-            }
-            else if (inFront == "left" && player.transform.position.x < rightFoot.transform.position.x)
-            {
-                leftFoot.transform.position = new Vector2(rightFoot.transform.position.x - offset, leftFoot.transform.position.y);
-            }
-
-        }
-        else        //ON WALLS
-        {
-            print("ON WALL");
-            if (rightFoot.transform.position.y > leftFoot.transform.position.y)
-            {
+                rightFoot.transform.position = new Vector2(leftFoot.transform.position.x - offset * -legs.gravityDirection.y, leftFoot.transform.position.y + offset * -legs.gravityDirection.x);
                 inFront = "right";
                 GOinFront = rightFoot;
             }
-            else
+            else if (inFront == "left" && player.transform.position.x < rightFoot.transform.position.x)
             {
+                leftFoot.transform.position = new Vector2(rightFoot.transform.position.x - offset * -legs.gravityDirection.y, rightFoot.transform.position.y + offset * -legs.gravityDirection.x);
                 inFront = "left";
                 GOinFront = leftFoot;
             }
 
-            //move right
-            
-            if (inFront == "right" && player.transform.position.y > rightFoot.transform.position.y)
+
+        }
+
+        rightFoot.transform.eulerAngles = leftFoot.transform.eulerAngles = new Vector3(0, 0, rotator.eulerAngles.z);
+
+        RaycastHit2D hitLeft = Physics2D.Raycast(leftFoot.transform.position, -legs.gravityDirection, 5, lm);
+        if (hitLeft.collider != null)
+        {
+            print("PLAYSDYASDYSADI)SADYI");
+            Ting(0);
+        }
+            RaycastHit2D hitRight = Physics2D.Raycast(rightFoot.transform.position, -legs.gravityDirection, 5, lm);
+        if (hitRight.collider != null)
+        {
+            print("RIGHTIH SIAFHASHIF");
+            Ting(1);
+        }
+        Debug.DrawRay(leftFoot.transform.position, -legs.gravityDirection, Color.yellow, 2);
+
+
+
+
+    }
+
+    void Ting(int dir)
+    {
+        if (dir == 0)           //|LEFT LASER GONE OFF
+        {
+            if (inFront == "right")
             {
-                leftFoot.transform.position = new Vector2(rightFoot.transform.position.x, leftFoot.transform.position.y - offset);
+                //going left
+                //move rightfoot to the left
+                rightFoot.transform.position = new Vector2(leftFoot.transform.position.x - offset * -legs.gravityDirection.y, leftFoot.transform.position.y + offset * -legs.gravityDirection.x);
+                inFront = "left";
+            }
+            else
+            {
+                //move rightfoot right
+                rightFoot.transform.position = new Vector2(leftFoot.transform.position.x + offset * -legs.gravityDirection.y, leftFoot.transform.position.y + offset * legs.gravityDirection.x);
+                inFront = "right";
+            }
+        }
+        else if (dir == 1)      //right laser gone off
+        {
+            if (inFront == "right")
+            {
+                //move leftfoot right
+                leftFoot.transform.position = new Vector2(rightFoot.transform.position.x + offset * -legs.gravityDirection.y, rightFoot.transform.position.y + offset * legs.gravityDirection.x);
+                inFront = "left";
+                        
+            }
+            else
+            {
+                //move leftfoot left
+                leftFoot.transform.position = new Vector2(rightFoot.transform.position.x - offset * -legs.gravityDirection.y, rightFoot.transform.position.y + offset * -legs.gravityDirection.x);
+                inFront = "right";
+            }
+        }
+
+        if (false)
+        {
+            //going right, hitting rightr ray
+            if (inFront == "right" && player.transform.position.x > rightFoot.transform.position.x)
+            {
+                leftFoot.transform.position = new Vector2(rightFoot.transform.position.x + offset * -legs.gravityDirection.y, rightFoot.transform.position.y + offset * legs.gravityDirection.x);
+                inFront = "left";
+                GOinFront = leftFoot;
             }
 
-            else if (inFront == "left" && player.transform.position.y > leftFoot.transform.position.y)
+            //going right, hitting left ray
+            else if (inFront == "left" && player.transform.position.x > leftFoot.transform.position.x)
             {
-                rightFoot.transform.position = new Vector2(leftFoot.transform.position.x, rightFoot.transform.position.y - offset);
+                rightFoot.transform.position = new Vector2(leftFoot.transform.position.x + offset * -legs.gravityDirection.y, leftFoot.transform.position.y + offset * legs.gravityDirection.x);
+                inFront = "right";
+                GOinFront = rightFoot;
             }
+
 
             //move left
+            //going left, hitting left
             else if (inFront == "right" && player.transform.position.x < leftFoot.transform.position.x)
             {
-                rightFoot.transform.position = new Vector2(leftFoot.transform.position.x, rightFoot.transform.position.y + offset);
+                rightFoot.transform.position = new Vector2(leftFoot.transform.position.x - offset * -legs.gravityDirection.y, leftFoot.transform.position.y + offset * -legs.gravityDirection.x);
+                inFront = "right";
+                GOinFront = rightFoot;
             }
+            //going left, hitting right
             else if (inFront == "left" && player.transform.position.x < rightFoot.transform.position.x)
             {
-                leftFoot.transform.position = new Vector2(rightFoot.transform.position.x, leftFoot.transform.position.y + offset);
+                leftFoot.transform.position = new Vector2(rightFoot.transform.position.x - offset * -legs.gravityDirection.y, rightFoot.transform.position.y + offset * -legs.gravityDirection.x);
+                inFront = "left";
+                GOinFront = leftFoot;
             }
-             
         }
-		
-        
+
     }
 }
