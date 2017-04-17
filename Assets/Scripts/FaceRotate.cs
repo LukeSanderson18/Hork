@@ -20,7 +20,7 @@ public class FaceRotate : MonoBehaviour {
 
         if (hor != 0 || ver != 0)
         {
-            if (transform.parent.GetComponent<Legs>().walking)
+            if (transform.parent.parent.GetComponent<Legs>().walking)
             {
                 float angle = Mathf.Atan2(hor, ver) * Mathf.Rad2Deg;
                 Quaternion bane = Quaternion.Euler(new Vector3(0, 0, angle - 90));

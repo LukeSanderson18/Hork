@@ -18,7 +18,7 @@ public class footTargets : MonoBehaviour
     public float offset = 1.2f;
 
     float readyTimer;
-    bool touching;
+    public bool touching;
 
     float refVel;
     // Use this for initialization
@@ -70,10 +70,18 @@ public class footTargets : MonoBehaviour
 
         }
 
+        
         rightFoot.transform.eulerAngles = leftFoot.transform.eulerAngles = new Vector3(0, 0, rotator.eulerAngles.z);
 
-        RaycastHit2D hitLeft = Physics2D.Raycast(leftFoot.transform.position, -legs.gravityDirection, 20, lm);
-        RaycastHit2D hitRight = Physics2D.Raycast(rightFoot.transform.position, -legs.gravityDirection, 20, lm);
+        RaycastHit2D hitLeft = Physics2D.Raycast(leftFoot.transform.position, -legs.gravityDirection, Mathf.Infinity, lm);
+        RaycastHit2D hitRight = Physics2D.Raycast(rightFoot.transform.position, -legs.gravityDirection, Mathf.Infinity, lm);
+
+        //RaycastHit2D leftPointToPlayer = Physics2D.Raycast(leftFoot.transform.position, (player.transform.position - leftFoot.transform.position), Mathf.Infinity, lm);
+        //RaycastHit2D rightPointToPlayer = Physics2D.Raycast(rightFoot.transform.position, (player.transform.position - rightFoot.transform.position), Mathf.Infinity, lm);
+
+       // print(player.transform.position - leftFoot.transform.position);
+
+        
 
         if (hitLeft.collider != null)
         {
@@ -97,11 +105,9 @@ public class footTargets : MonoBehaviour
         {
             touching = false;
         }
+      
         //print(touching())
       //  Debug.DrawRay(leftFoot.transform.position, -legs.gravityDirection, Color.yellow, 2);
-
-        
-
 
     }
 
@@ -140,6 +146,7 @@ public class footTargets : MonoBehaviour
             }
         }
 
+        /*
         if (false)
         {
             //going right, hitting rightr ray
@@ -175,6 +182,7 @@ public class footTargets : MonoBehaviour
                 GOinFront = leftFoot;
             }
         }
+        */
 
     }
 }
