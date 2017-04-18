@@ -1,0 +1,13 @@
+Version 1.2
+***	NOTE: A few files have been moved for this release, this is mostly cleanup to remove assets that were conflicting with existing packages (namely iTween and the visual editor).  It is highly recommended that you delete your existing CameraController2D files and re-import version 1.2.
+
+- Added PushBox functionality
+- Fixed movement so that it is even in the horizontal and vertical directions
+- Added ability to run camera movement logic in FixedUpdate instead of LateUpdate
+- Added ability to use a camera located on a different object from the CameraController2D component
+- Removed iTween usage in examples
+- Moved GoodStuff library to the Scripts directory instead of the Examples directory as the CameraController2D class depends on it
+
+Version 1.1
+- Fixed enum that wasn't allowing you to select the XY, or YZ planes
+- Various small bug fixes
