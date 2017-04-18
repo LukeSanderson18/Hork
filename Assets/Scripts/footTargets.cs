@@ -116,8 +116,8 @@ public class footTargets : MonoBehaviour
 
         // if (Mathf.Abs(legs.gravityDirection.x) < 0.3f)
 
-
-        if (false)
+        print("HHHHHHHHHHH" + player.transform.position.x + " , " + leftFoot.transform.position.x * -legs.gravityDirection.y);
+        if (true)
         {
             if (player.transform.position.x > rightFoot.transform.position.x * -legs.gravityDirection.y)// && asdfRight  > rightFoot.transform.position.x * -legs.gravityDirection.x)
             {
@@ -125,7 +125,7 @@ public class footTargets : MonoBehaviour
                 {
                     leftFoot.transform.position = new Vector2(rightFoot.transform.position.x + offset * -legs.gravityDirection.y, rightFoot.transform.position.y + offset * legs.gravityDirection.x);
                     inFront = "left";
-                    print("1");
+                    print("floor1");
                     //Ting(1);
                 }
             }
@@ -135,7 +135,7 @@ public class footTargets : MonoBehaviour
                 {
                     rightFoot.transform.position = new Vector2(leftFoot.transform.position.x + offset * -legs.gravityDirection.y, leftFoot.transform.position.y + offset * legs.gravityDirection.x);
                     inFront = "right";
-                    print("2");
+                    print("floor2");
 
                     //Ting(1);
                 }
@@ -146,7 +146,7 @@ public class footTargets : MonoBehaviour
                 {
                     leftFoot.transform.position = new Vector2(rightFoot.transform.position.x - offset * -legs.gravityDirection.y, rightFoot.transform.position.y - offset * legs.gravityDirection.x);
                     inFront = "right";
-                    print("3");
+                    print("floor3");
 
                     //Ting(1);
                 }
@@ -157,7 +157,7 @@ public class footTargets : MonoBehaviour
                 {
                     rightFoot.transform.position = new Vector2(leftFoot.transform.position.x - offset * -legs.gravityDirection.y, leftFoot.transform.position.y - offset * legs.gravityDirection.x);
                     inFront = "left";
-                    print("4");
+                    print("floor4");
 
                     //Ting(1);
                 }
@@ -174,7 +174,7 @@ public class footTargets : MonoBehaviour
             {
                 leftFoot.transform.position = new Vector2(rightFoot.transform.position.x + offset * -legs.gravityDirection.y, rightFoot.transform.position.y + offset * legs.gravityDirection.x);
                 inFront = "left";
-                print("1");
+                print("wall1");
                 //Ting(1);
             }
         }
@@ -184,7 +184,7 @@ public class footTargets : MonoBehaviour
             {
                 rightFoot.transform.position = new Vector2(leftFoot.transform.position.x + offset * -legs.gravityDirection.y, leftFoot.transform.position.y + offset * legs.gravityDirection.x);
                 inFront = "right";
-                print("2");
+                print("wall2");
 
                 //Ting(1);
             }
@@ -195,7 +195,7 @@ public class footTargets : MonoBehaviour
             {
                 leftFoot.transform.position = new Vector2(rightFoot.transform.position.x - offset * -legs.gravityDirection.y, rightFoot.transform.position.y - offset * legs.gravityDirection.x);
                 inFront = "right";
-                print("3");
+                print("wall3");
 
                 //Ting(1);
             }
@@ -206,7 +206,7 @@ public class footTargets : MonoBehaviour
             {
                 rightFoot.transform.position = new Vector2(leftFoot.transform.position.x - offset * -legs.gravityDirection.y, leftFoot.transform.position.y - offset * legs.gravityDirection.x);
                 inFront = "left";
-                print("4");
+                print("wall4");
 
                 //Ting(1);
             }
