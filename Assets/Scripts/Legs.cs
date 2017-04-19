@@ -123,7 +123,7 @@ public class Legs : MonoBehaviour
             Quaternion quat = Quaternion.FromToRotation(Vector3.up, new Vector3(downHit2.normal.x, downHit2.normal.y, 0));
 
             //    print(downHit2.normal);
-            gravityDirection = -downHit2.normal;
+            gravityDirection = -downHit2.normal;// + (Vector2.one * 0.01f);
             if (walking)
                 rotater.rotation = Quaternion.Lerp(rotater.rotation, quat, Time.deltaTime * 4);
                 //rotater.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(downHit2.normal.x, downHit2.normal.y, 0), Time.deltaTime * 4);
@@ -154,7 +154,7 @@ public class Legs : MonoBehaviour
             RaycastHit2D downHit = Physics2D.Raycast(transform.position, gravityDirection, 2.3f, lm);
             if (downHit.collider == null)
             {
-                print("not hitting.");
+               // print("not hitting.");
                rb.AddForce(-gravityDirection * gravityUpScale * Physics.gravity.y);
             }
             else
@@ -193,9 +193,10 @@ public class Legs : MonoBehaviour
             }
 
                            //if not grounded
+               if (true)
             {
-                leftTarget.transform.position = new Vector2(leftTarget.transform.position.x, leftTarget.transform.position.y - leftDistance.y);
-                rightTarget.transform.position = new Vector2(rightTarget.transform.position.x, rightTarget.transform.position.y - rightDistance.y);
+                leftTarget.transform.position = new Vector2(leftTarget.transform.position.x - leftDistance.x, leftTarget.transform.position.y - leftDistance.y);
+                rightTarget.transform.position = new Vector2(rightTarget.transform.position.x - rightDistance.y, rightTarget.transform.position.y - rightDistance.y);
             }
         }
     }

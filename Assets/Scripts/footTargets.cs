@@ -13,6 +13,7 @@ public class footTargets : MonoBehaviour
     public GameObject rightFoot;
     public string inFront = "";
     public GameObject GOinFront;
+    public GameObject GOinBack;
     public bool isPlayer;
 
     public float offset = 1.2f;
@@ -80,203 +81,236 @@ public class footTargets : MonoBehaviour
 
         // print(player.transform.position - leftFoot.transform.position);
 
-        if (false)
+        if (true)
         {
+           
+            float asdfRight = Mathf.Abs(player.transform.position.y - (player.transform.position.y - rightFoot.transform.position.y));
+            float asdfLeft = Mathf.Abs(player.transform.position.y - (player.transform.position.y - leftFoot.transform.position.y));
+            float xFloat = rightFoot.transform.position.x * legs.gravityDirection.x;
+            //  print(("PT: " + asdfRight + ", has to be greater than: " + xFloat));
+            //print(rightFoot .transform.position.x * -legs.gravityDirection.y);
 
-            if (hitLeft.collider != null)
+            // if (Mathf.Abs(legs.gravityDirection.x) < 0.3f)
+
+            //print("HHHHHHHHHHH" + player.transform.position.x + " , " + leftFoot.transform.position.x * -legs.gravityDirection.y);
+            if (legs.gravityDirection.y == -1)
             {
-                if (!touching)
+                if (player.transform.position.x > rightFoot.transform.position.x * -legs.gravityDirection.y)// && asdfRight  > rightFoot.transform.position.x * -legs.gravityDirection.x)
                 {
-                    print("PLAYSDYASDYSADI)SADYI");
-                    Ting(0);
-                    touching = true;
-
+                    if (inFront == "right")
+                    {
+                        leftFoot.transform.position = new Vector2(rightFoot.transform.position.x + offset * -legs.gravityDirection.y, rightFoot.transform.position.y + offset * legs.gravityDirection.x);
+                        inFront = "left";
+                        //Ting(1);
+                    }
+                }
+                if (player.transform.position.x > leftFoot.transform.position.x * -legs.gravityDirection.y)// && asdfLeft > leftFoot.transform.position.x * -legs.gravityDirection.x)
+                {
+                    if (inFront == "left")
+                    {
+                        rightFoot.transform.position = new Vector2(leftFoot.transform.position.x + offset * -legs.gravityDirection.y, leftFoot.transform.position.y + offset * legs.gravityDirection.x);
+                        inFront = "right";
+                        //Ting(1);
+                    }
+                }
+                if (player.transform.position.x < rightFoot.transform.position.x * -legs.gravityDirection.y)// && asdfRight < rightFoot.transform.position.x * -legs.gravityDirection.x)
+                {
+                    if (inFront == "left")
+                    {
+                        leftFoot.transform.position = new Vector2(rightFoot.transform.position.x - offset * -legs.gravityDirection.y, rightFoot.transform.position.y - offset * legs.gravityDirection.x);
+                        inFront = "right";
+                        //Ting(1);
+                    }
+                }
+                if (player.transform.position.x < leftFoot.transform.position.x * -legs.gravityDirection.y)// && asdfLeft  < leftFoot.transform.position.x * -legs.gravityDirection.x)
+                {
+                    if (inFront == "right")
+                    {
+                        rightFoot.transform.position = new Vector2(leftFoot.transform.position.x - offset * -legs.gravityDirection.y, leftFoot.transform.position.y - offset * legs.gravityDirection.x);
+                        inFront = "left";
+                        //Ting(1);
+                    }
                 }
             }
-            else if (hitRight.collider != null)
+            //
+            //
+            //wall test
+            //
+            //
+            else if (legs.gravityDirection.x == 1)
             {
-                if (!touching)
+                if (player.transform.position.y > rightFoot.transform.position.y * legs.gravityDirection.x)// && asdfRight  > rightFoot.transform.position.x * -legs.gravityDirection.x)
                 {
-                    print("RIGHTIH SIAFHASHIF");
-                    Ting(1);
-                    touching = true;
+                    if (inFront == "right")
+                    {
+                        leftFoot.transform.position = new Vector2(rightFoot.transform.position.x + offset * -legs.gravityDirection.y, rightFoot.transform.position.y + offset * legs.gravityDirection.x);
+                        inFront = "left";
+                        //Ting(1);
+                    }
                 }
+                if (player.transform.position.y > leftFoot.transform.position.y * legs.gravityDirection.x)// && asdfLeft > leftFoot.transform.position.x * -legs.gravityDirection.x)
+                {
+                    if (inFront == "left")
+                    {
+                        rightFoot.transform.position = new Vector2(leftFoot.transform.position.x + offset * -legs.gravityDirection.y, leftFoot.transform.position.y + offset * legs.gravityDirection.x);
+                        inFront = "right";
+                        //Ting(1);
+                    }
+                }
+
+                if (player.transform.position.y < rightFoot.transform.position.y * legs.gravityDirection.x)// && asdfRight < rightFoot.transform.position.x * -legs.gravityDirection.x)
+                {
+                    if (inFront == "left")
+                    {
+                        leftFoot.transform.position = new Vector2(rightFoot.transform.position.x - offset * -legs.gravityDirection.y, rightFoot.transform.position.y - offset * legs.gravityDirection.x);
+                        inFront = "right";
+                        //Ting(1);
+                    }
+                }
+
+
+                if (player.transform.position.y < leftFoot.transform.position.y * legs.gravityDirection.x)// && asdfLeft  < leftFoot.transform.position.x * -legs.gravityDirection.x)
+                {
+                    if (inFront == "right")
+                    {
+                        rightFoot.transform.position = new Vector2(leftFoot.transform.position.x - offset * -legs.gravityDirection.y, leftFoot.transform.position.y - offset * legs.gravityDirection.x);
+                        inFront = "left";
+                        //Ting(1);
+                    }
+                }
+            }
+        }
+        //else
+
+        if (false)
+        {
+            if (inFront == "left")
+            {
+                GOinFront = leftFoot;
+                GOinBack = rightFoot;
             }
             else
             {
-                touching = false;
+                GOinFront = rightFoot;
+                GOinBack = leftFoot;
             }
-        }
 
-        float asdfRight = Mathf.Abs(player.transform.position.y - (player.transform.position.y - rightFoot.transform.position.y));
-        float asdfLeft = Mathf.Abs(player.transform.position.y - (player.transform.position.y - leftFoot.transform.position.y));
-        float xFloat = rightFoot.transform.position.x * legs.gravityDirection.x;
-        //  print(("PT: " + asdfRight + ", has to be greater than: " + xFloat));
-        //print(rightFoot .transform.position.x * -legs.gravityDirection.y);
+            float a = player.transform.position.y - GOinFront.transform.position.y;
+            float b = player.transform.position.x - GOinFront.transform.position.x;
 
-        // if (Mathf.Abs(legs.gravityDirection.x) < 0.3f)
+            float c = player.transform.position.y - GOinBack.transform.position.y;
+            float d = player.transform.position.x - GOinBack.transform.position.x;
 
-        print("HHHHHHHHHHH" + player.transform.position.x + " , " + leftFoot.transform.position.x * -legs.gravityDirection.y);
-        if (true)
-        {
-            if (player.transform.position.x > rightFoot.transform.position.x * -legs.gravityDirection.y)// && asdfRight  > rightFoot.transform.position.x * -legs.gravityDirection.x)
+            float angle1 = Mathf.Tan(a / b);
+
+            float angle2 = Mathf.Tan(c / d);
+
+            //print(Mathf.Tan(legs.gravityDirection.y / legs.gravityDirection.x));
+            if (Mathf.Tan(legs.gravityDirection.y / legs.gravityDirection.x) - angle1 < 0.01)
             {
-                if (inFront == "right")
+                if (GOinFront == rightFoot)
                 {
                     leftFoot.transform.position = new Vector2(rightFoot.transform.position.x + offset * -legs.gravityDirection.y, rightFoot.transform.position.y + offset * legs.gravityDirection.x);
                     inFront = "left";
-                    print("floor1");
-                    //Ting(1);
+                    GOinFront = leftFoot;
                 }
-            }
-            if (player.transform.position.x > leftFoot.transform.position.x * -legs.gravityDirection.y)// && asdfLeft > leftFoot.transform.position.x * -legs.gravityDirection.x)
-            {
-                if (inFront == "left")
+                else
                 {
                     rightFoot.transform.position = new Vector2(leftFoot.transform.position.x + offset * -legs.gravityDirection.y, leftFoot.transform.position.y + offset * legs.gravityDirection.x);
                     inFront = "right";
-                    print("floor2");
+                    GOinFront = rightFoot;
 
-                    //Ting(1);
                 }
             }
-            if (player.transform.position.x < rightFoot.transform.position.x * -legs.gravityDirection.y)// && asdfRight < rightFoot.transform.position.x * -legs.gravityDirection.x)
+            if (Mathf.Tan(legs.gravityDirection.y / legs.gravityDirection.x) - angle2 > 0.01)
             {
-                if (inFront == "left")
-                {
-                    leftFoot.transform.position = new Vector2(rightFoot.transform.position.x - offset * -legs.gravityDirection.y, rightFoot.transform.position.y - offset * legs.gravityDirection.x);
-                    inFront = "right";
-                    print("floor3");
-
-                    //Ting(1);
-                }
-            }
-            if (player.transform.position.x < leftFoot.transform.position.x * -legs.gravityDirection.y)// && asdfLeft  < leftFoot.transform.position.x * -legs.gravityDirection.x)
-            {
-                if (inFront == "right")
+                if (GOinFront == rightFoot)
                 {
                     rightFoot.transform.position = new Vector2(leftFoot.transform.position.x - offset * -legs.gravityDirection.y, leftFoot.transform.position.y - offset * legs.gravityDirection.x);
                     inFront = "left";
-                    print("floor4");
+                    GOinFront = leftFoot;
+                }
+                else
+                {
+                    leftFoot.transform.position = new Vector2(rightFoot.transform.position.x - offset * -legs.gravityDirection.y, rightFoot.transform.position.y - offset * legs.gravityDirection.x);
 
-                    //Ting(1);
+                    inFront = "right";
+                    GOinFront = rightFoot;
+
                 }
             }
         }
-        //
-        //
-        //wall test
-        //
-        //
-        if (player.transform.position.y > rightFoot.transform.position.y * legs.gravityDirection.x)// && asdfRight  > rightFoot.transform.position.x * -legs.gravityDirection.x)
+
+
+
+    }
+
+    /*else                //on wall
+    {
+        print("ON WALL");
+        if (player.transform.position.y > rightFoot.transform.position.x * legs.gravityDirection.x)
         {
             if (inFront == "right")
             {
                 leftFoot.transform.position = new Vector2(rightFoot.transform.position.x + offset * -legs.gravityDirection.y, rightFoot.transform.position.y + offset * legs.gravityDirection.x);
                 inFront = "left";
-                print("wall1");
+                print("1");
                 //Ting(1);
             }
         }
-        if (player.transform.position.y > leftFoot.transform.position.y * legs.gravityDirection.x)// && asdfLeft > leftFoot.transform.position.x * -legs.gravityDirection.x)
+        if (player.transform.position.y  > leftFoot.transform.position.x * legs.gravityDirection.x)
         {
             if (inFront == "left")
             {
                 rightFoot.transform.position = new Vector2(leftFoot.transform.position.x + offset * -legs.gravityDirection.y, leftFoot.transform.position.y + offset * legs.gravityDirection.x);
                 inFront = "right";
-                print("wall2");
+                print("2");
 
                 //Ting(1);
             }
         }
-        if (player.transform.position.y < rightFoot.transform.position.y * legs.gravityDirection.x)// && asdfRight < rightFoot.transform.position.x * -legs.gravityDirection.x)
+        if (player.transform.position.y  < rightFoot.transform.position.x * legs.gravityDirection.x)
         {
             if (inFront == "left")
             {
                 leftFoot.transform.position = new Vector2(rightFoot.transform.position.x - offset * -legs.gravityDirection.y, rightFoot.transform.position.y - offset * legs.gravityDirection.x);
                 inFront = "right";
-                print("wall3");
+                print("3");
 
                 //Ting(1);
             }
         }
-        if (player.transform.position.y < leftFoot.transform.position.y * legs.gravityDirection.x)// && asdfLeft  < leftFoot.transform.position.x * -legs.gravityDirection.x)
+        if (player.transform.position.y  < leftFoot.transform.position.x * legs.gravityDirection.x)
         {
             if (inFront == "right")
             {
                 rightFoot.transform.position = new Vector2(leftFoot.transform.position.x - offset * -legs.gravityDirection.y, leftFoot.transform.position.y - offset * legs.gravityDirection.x);
                 inFront = "left";
-                print("wall4");
+                print("1");
 
                 //Ting(1);
             }
         }
-
-        /*else                //on wall
-        {
-            print("ON WALL");
-            if (player.transform.position.y > rightFoot.transform.position.x * legs.gravityDirection.x)
-            {
-                if (inFront == "right")
-                {
-                    leftFoot.transform.position = new Vector2(rightFoot.transform.position.x + offset * -legs.gravityDirection.y, rightFoot.transform.position.y + offset * legs.gravityDirection.x);
-                    inFront = "left";
-                    print("1");
-                    //Ting(1);
-                }
-            }
-            if (player.transform.position.y  > leftFoot.transform.position.x * legs.gravityDirection.x)
-            {
-                if (inFront == "left")
-                {
-                    rightFoot.transform.position = new Vector2(leftFoot.transform.position.x + offset * -legs.gravityDirection.y, leftFoot.transform.position.y + offset * legs.gravityDirection.x);
-                    inFront = "right";
-                    print("2");
-
-                    //Ting(1);
-                }
-            }
-            if (player.transform.position.y  < rightFoot.transform.position.x * legs.gravityDirection.x)
-            {
-                if (inFront == "left")
-                {
-                    leftFoot.transform.position = new Vector2(rightFoot.transform.position.x - offset * -legs.gravityDirection.y, rightFoot.transform.position.y - offset * legs.gravityDirection.x);
-                    inFront = "right";
-                    print("3");
-
-                    //Ting(1);
-                }
-            }
-            if (player.transform.position.y  < leftFoot.transform.position.x * legs.gravityDirection.x)
-            {
-                if (inFront == "right")
-                {
-                    rightFoot.transform.position = new Vector2(leftFoot.transform.position.x - offset * -legs.gravityDirection.y, leftFoot.transform.position.y - offset * legs.gravityDirection.x);
-                    inFront = "left";
-                    print("1");
-
-                    //Ting(1);
-                }
-            }
-        }
-        */
-        // else
-        // {
-        //     Ting(0);
-        // }
-
-        // if (player.transform.position.x > rightFoot.transform.position.x * -legs.gravityDirection.y || player.transform.position.y > rightFoot.transform.position.x * legs.gravityDirection.x)
-        // {
-        //     Ting(1);
-        // }
-
-        //print(touching())
-        //  Debug.DrawRay(leftFoot.transform.position, -legs.gravityDirection, Color.yellow, 2);
-
     }
+    */
+    // else
+    // {
+    //     Ting(0);
+    // }
+
+    // if (player.transform.position.x > rightFoot.transform.position.x * -legs.gravityDirection.y || player.transform.position.y > rightFoot.transform.position.x * legs.gravityDirection.x)
+    // {
+    //     Ting(1);
+    // }
+
+    //print(touching())
+    //  Debug.DrawRay(leftFoot.transform.position, -legs.gravityDirection, Color.yellow, 2);
+
+
 
     void Ting(int dir)
     {
+
         rightFoot.transform.eulerAngles = leftFoot.transform.eulerAngles = new Vector3(0, 0, rotator.eulerAngles.z);
 
         if (dir == 0)           //|LEFT LASER GONE OFF
@@ -351,4 +385,6 @@ public class footTargets : MonoBehaviour
         */
 
     }
+
+
 }
