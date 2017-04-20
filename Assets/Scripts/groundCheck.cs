@@ -19,7 +19,9 @@ public class groundCheck : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        groundShooter.position = new Vector2(transform.position.x - (mainSprite.gravityDirection.x), transform.position.y - (mainSprite.gravityDirection.y));
+        
+            groundShooter.position = new Vector2(transform.position.x - (mainSprite.gravityDirection.x), transform.position.y - (mainSprite.gravityDirection.y));
+        
         gravityDirection = mainSprite.gravityDirection;
         RaycastHit2D hitLeft = Physics2D.Raycast( new Vector2(groundShooter.transform.position.x,groundShooter.transform.position.y), mainSprite.gravityDirection, distance, lm);
         Debug.DrawRay(new Vector2(transform.position.x + -gravityDirection.x*0.5f, transform.position.y + -gravityDirection.y*0.5f), gravityDirection, Color.green, distance);

@@ -324,7 +324,7 @@ void Update()
 
         if (hitLeft.collider != null)
         {
-            print("hitting summat");
+          //  print("hitting summat");
             leftFloorPoint.position = hitLeft.point;
         }
         if (hitRight.collider != null)
@@ -362,7 +362,7 @@ void Update()
         //if feet too close together... dirty.
         if (Vector2.Distance(leftFoot.transform.position,rightFoot.transform.position) < 0.7f)
         {
-            print("too close!");
+            //print("too close!");
             if(Vector2.Distance(leftFoot.transform.position,leftFloorPoint.position) < Vector2.Distance(rightFoot.transform.position,leftFloorPoint.position))
             {
                 rightFoot.transform.position = rightFloorPoint.transform.position;

@@ -129,7 +129,7 @@ public class Legs : MonoBehaviour
             //    print(downHit2.normal);
             gravityDirection = -downHit2.normal;// + (Vector2.one * 0.01f);
             if (walking)
-                rotater.rotation =  Quaternion.Lerp(rotater.rotation, quat, Time.deltaTime * 10);
+                rotater.rotation =  Quaternion.Euler(0,0,Mathf.Lerp(rotater.rotation.z, quat.z, Time.deltaTime * 10));
                 //rotater.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(downHit2.normal.x, downHit2.normal.y, 0), Time.deltaTime * 4);
         }
 
