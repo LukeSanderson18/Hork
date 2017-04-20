@@ -23,7 +23,7 @@ public class ColorChooser : MonoBehaviour
 
         if (Input.GetButtonDown("Weapon1"))
         {
-            transform.eulerAngles = new Vector3(-90, 0, 0);
+        //    transform.eulerAngles = new Vector3(0, 0, 0);
         }
         if ((hor != 0 || ver != 0) && Input.GetButton("Weapon1"))
         {

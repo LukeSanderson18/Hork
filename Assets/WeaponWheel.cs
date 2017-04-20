@@ -104,11 +104,11 @@ public class WeaponWheel : MonoBehaviour
         }
 
 
-        if ((Input.GetKeyDown(KeyCode.E) || (Input.GetAxisRaw("WeaponChange") < -0.5f)) && !pressed)
+        if ((Input.GetKeyDown(KeyCode.E) || (Input.GetAxisRaw("WeaponChange") < -0.5f)) && !pressed && !(Input.GetButton("Weapon1")))
         {
             RollUp(45);
         }
-        if ((Input.GetKeyDown(KeyCode.Q) || Input.GetAxisRaw("WeaponChange") > 0.5f) && !pressed)
+        if ((Input.GetKeyDown(KeyCode.Q) || Input.GetAxisRaw("WeaponChange") > 0.5f) && !pressed && !(Input.GetButton("Weapon1")))
         {
             RollDown(-45);
         }
